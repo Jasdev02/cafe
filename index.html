@@ -386,68 +386,9 @@
                 <button class="clear-btn" id="clearFilters">Clear all</button>
             </div>
 
-            <!-- Ambience Category -->
-            <div class="filter-category">
-                <div class="category-title">Ambience</div>
-                <div class="filter-group">
-                    <div class="filter-option">
-                        <input type="checkbox" id="ambience" value="ambience">
-                        <label for="ambience">Great Ambience</label>
-                    </div>
-                    <div class="filter-option">
-                        <input type="checkbox" id="quiet" value="quiet">
-                        <label for="quiet">Quiet</label>
-                    </div>
-                    <div class="filter-option">
-                        <input type="checkbox" id="scenic" value="scenic">
-                        <label for="scenic">Scenic View</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Seating Category -->
-            <div class="filter-category">
-                <div class="category-title">Seating</div>
-                <div class="filter-group">
-                    <div class="filter-option">
-                        <input type="checkbox" id="open-seating" value="open-seating">
-                        <label for="open-seating">Open Seating</label>
-                    </div>
-                    <div class="filter-option">
-                        <input type="checkbox" id="outdoor" value="outdoor">
-                        <label for="outdoor">Outdoor</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Amenities Category -->
-            <div class="filter-category">
-                <div class="category-title">Amenities</div>
-                <div class="filter-group">
-                    <div class="filter-option">
-                        <input type="checkbox" id="wifi" value="wifi">
-                        <label for="wifi">WiFi</label>
-                    </div>
-                    <div class="filter-option">
-                        <input type="checkbox" id="parking" value="parking">
-                        <label for="parking">Parking</label>
-                    </div>
-                    <div class="filter-option">
-                        <input type="checkbox" id="pets" value="pets">
-                        <label for="pets">Pet Friendly</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Food Options Category -->
-            <div class="filter-category">
-                <div class="category-title">Food Options</div>
-                <div class="filter-group">
-                    <div class="filter-option">
-                        <input type="checkbox" id="vegan" value="vegan">
-                        <label for="vegan">Vegan Options</label>
-                    </div>
-                </div>
+            <!-- Filter categories will be dynamically loaded here -->
+            <div id="filterContainer">
+                <div class="loading" style="padding: 20px; font-size: 14px;">Loading filters...</div>
             </div>
         </aside>
 
@@ -462,6 +403,7 @@
         let cafeData = null;
         let currentLocation = '';
         let selectedFilters = [];
+        let lastLoadTime = null;
 
         // Initialize the app
         async function init() {
@@ -502,6 +444,7 @@
 
                 updateLastUpdatedTime();
                 renderLocationTabs();
+                renderFilters(); // Now reads from JSON!
                 renderCafes();
                 attachEventListeners();
 
@@ -564,6 +507,78 @@
                 tab.textContent = location;
                 tabsContainer.appendChild(tab);
             });
+        }
+
+        // ✨ NEW: Render filters dynamically from JSON
+        function renderFilters() {
+            const filterContainer = document.getElementById('filterContainer');
+            filterContainer.innerHTML = '';
+
+            // Check if filter_categories exists in JSON
+            if (cafeData.filter_categories && cafeData.filter_categories.length > 0) {
+                // Use categorized filters
+                cafeData.filter_categories.forEach(category => {
+                    const categoryDiv = document.createElement('div');
+                    categoryDiv.className = 'filter-category';
+
+                    const categoryTitle = document.createElement('div');
+                    categoryTitle.className = 'category-title';
+                    categoryTitle.textContent = category.name;
+                    categoryDiv.appendChild(categoryTitle);
+
+                    const filterGroup = document.createElement('div');
+                    filterGroup.className = 'filter-group';
+
+                    category.filters.forEach(filter => {
+                        const filterOption = document.createElement('div');
+                        filterOption.className = 'filter-option';
+
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.id = filter.id;
+                        checkbox.value = filter.id;
+                        checkbox.checked = selectedFilters.includes(filter.id);
+
+                        const label = document.createElement('label');
+                        label.htmlFor = filter.id;
+                        label.textContent = filter.label;
+                        label.title = filter.description;
+
+                        filterOption.appendChild(checkbox);
+                        filterOption.appendChild(label);
+                        filterGroup.appendChild(filterOption);
+                    });
+
+                    categoryDiv.appendChild(filterGroup);
+                    filterContainer.appendChild(categoryDiv);
+                });
+            } else if (cafeData.attributes && cafeData.attributes.length > 0) {
+                // Fallback to flat list if no categories
+                const filterGroup = document.createElement('div');
+                filterGroup.className = 'filter-group';
+
+                cafeData.attributes.forEach(attribute => {
+                    const filterOption = document.createElement('div');
+                    filterOption.className = 'filter-option';
+
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.id = attribute.id;
+                    checkbox.value = attribute.id;
+                    checkbox.checked = selectedFilters.includes(attribute.id);
+
+                    const label = document.createElement('label');
+                    label.htmlFor = attribute.id;
+                    label.textContent = attribute.label;
+                    label.title = attribute.description;
+
+                    filterOption.appendChild(checkbox);
+                    filterOption.appendChild(label);
+                    filterGroup.appendChild(filterOption);
+                });
+
+                filterContainer.appendChild(filterGroup);
+            }
         }
 
         // Render cafes based on filters
