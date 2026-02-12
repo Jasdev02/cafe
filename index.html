@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CafesOfBLR - Cafe Directory</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #4c3fff 0%, #3d2fd9 100%);
+            color: white;
+            padding: 20px 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .site-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .last-updated {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .refresh-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Location Tabs */
+        .location-tabs {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .location-tab {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .location-tab:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .location-tab.active {
+            background: white;
+            color: #4c3fff;
+            font-weight: 500;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #666;
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 40px;
+            gap: 30px;
+        }
+
+        /* Sidebar Filters */
+        .sidebar {
+            width: 280px;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            height: fit-content;
+            position: sticky;
+            top: 30px;
+        }
+
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .filter-title {
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .clear-btn {
+            color: #4c3fff;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .clear-btn:hover {
+            text-decoration: underline;
+        }
+
+        .filter-group {
+            margin-bottom: 20px;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            cursor: pointer;
+        }
+
+        .filter-option input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: #4c3fff;
+        }
+
+        .filter-option label {
+            cursor: pointer;
+            font-size: 15px;
+            color: #333;
+        }
+
+        /* Cafe Grid */
+        .cafe-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            align-content: start;
+        }
+
+        /* Cafe Card */
+        .cafe-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .cafe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .cafe-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background-color: #e0e0e0;
+        }
+
+        .cafe-content {
+            padding: 20px;
+            background: #2c3e50;
+            color: white;
+        }
+
+        .cafe-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .cafe-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cafe-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .star {
+            color: #ffd700;
+        }
+
+        .cafe-description {
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .cafe-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .tag {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .view-details-btn {
+            width: 100%;
+            background: #4c3fff;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .view-details-btn:hover {
+            background: #3d2fd9;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+            font-size: 18px;
+        }
+
+        .update-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4c3fff;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+            }
+
+            .cafe-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+
+            .last-updated {
+                position: static;
+                margin-top: 10px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .location-tabs {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .cafe-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="site-title">CafesOfBLR</div>
+        <div class="last-updated">
+            Last updated: <span id="lastUpdated">Loading...</span>
+            <button class="refresh-btn" onclick="forceRefresh()">🔄 Refresh</button>
+        </div>
+        <div class="location-tabs" id="locationTabs">
+            <!-- Tabs will be dynamically loaded -->
+        </div>
+    </div>
+
+    <!-- Update Notification -->
+    <div class="update-notification" id="updateNotification">
+        ✅ Data updated successfully!
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar Filters -->
+        <aside class="sidebar">
+            <div class="filter-header">
+                <div class="filter-title">
+                    <span>☰</span> Filters
+                </div>
+                <button class="clear-btn" id="clearFilters">Clear all</button>
+            </div>
+
+            <div class="filter-group" id="filterGroup">
+                <!-- Filters will be dynamically loaded -->
+            </div>
+        </aside>
+
+        <!-- Cafe Grid -->
+        <main class="cafe-grid" id="cafeGrid">
+            <div class="loading">Loading cafes...</div>
+        </main>
+    </div>
+
+    <script>
+        // Global state
+        let cafeData = null;
+        let currentLocation = '';
+        let selectedFilters = [];
+        let lastLoadTime = null;
+
+        // Initialize the app
+        async function init() {
+            try {
+                await loadCafeData();
+            } catch (error) {
+                console.error('Error loading cafe data:', error);
+                document.getElementById('cafeGrid').innerHTML = 
+                    '<div class="no-results">Error loading cafe data. Please make sure cafes_database.json is in the same directory.</div>';
+            }
+        }
+
+        // Load cafe data with cache busting
+        async function loadCafeData(forceRefresh = false) {
+            try {
+                // Add timestamp to prevent caching
+                const timestamp = new Date().getTime();
+                const url = forceRefresh 
+                    ? `cafes_database.json?t=${timestamp}` 
+                    : `cafes_database.json`;
+
+                const response = await fetch(url, {
+                    cache: forceRefresh ? 'no-cache' : 'default',
+                    headers: {
+                        'Cache-Control': forceRefresh ? 'no-cache' : 'default'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to load cafe data');
+                }
+
+                cafeData = await response.json();
+                lastLoadTime = new Date();
+
+                // Set initial location if not set
+                if (!currentLocation) {
+                    currentLocation = cafeData.locations[0];
+                }
+
+                // Update UI
+                updateLastUpdatedTime();
+                renderLocationTabs();
+                renderFilters();
+                renderCafes();
+                attachEventListeners();
+
+                // Show notification if force refresh
+                if (forceRefresh) {
+                    showUpdateNotification();
+                }
+
+            } catch (error) {
+                throw error;
+            }
+        }
+
+        // Force refresh function
+        async function forceRefresh() {
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = '🔄 Refreshing...';
+
+            try {
+                await loadCafeData(true);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🔄 Refresh';
+            }
+        }
+
+        // Show update notification
+        function showUpdateNotification() {
+            const notification = document.getElementById('updateNotification');
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Update last updated time
+        function updateLastUpdatedTime() {
+            const lastUpdatedEl = document.getElementById('lastUpdated');
+            if (cafeData && cafeData.metadata && cafeData.metadata.last_updated) {
+                lastUpdatedEl.textContent = cafeData.metadata.last_updated;
+            } else {
+                lastUpdatedEl.textContent = new Date().toLocaleDateString();
+            }
+        }
+
+        // Auto-refresh every 5 minutes (optional)
+        setInterval(() => {
+            loadCafeData(false);
+        }, 5 * 60 * 1000);
+
+        // Render location tabs
+        function renderLocationTabs() {
+            const tabsContainer = document.getElementById('locationTabs');
+            tabsContainer.innerHTML = '';
+
+            cafeData.locations.forEach((location) => {
+                const tab = document.createElement('button');
+                tab.className = `location-tab ${location === currentLocation ? 'active' : ''}`;
+                tab.dataset.location = location;
+                tab.textContent = location;
+                tabsContainer.appendChild(tab);
+            });
+        }
+
+        // Render filter checkboxes
+        function renderFilters() {
+            const filterGroup = document.getElementById('filterGroup');
+            filterGroup.innerHTML = '';
+
+            cafeData.attributes.forEach(attribute => {
+                const filterOption = document.createElement('div');
+                filterOption.className = 'filter-option';
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = attribute.id;
+                checkbox.value = attribute.id;
+                checkbox.checked = selectedFilters.includes(attribute.id);
+
+                const label = document.createElement('label');
+                label.htmlFor = attribute.id;
+                label.textContent = attribute.label;
+                label.title = attribute.description;
+
+                filterOption.appendChild(checkbox);
+                filterOption.appendChild(label);
+                filterGroup.appendChild(filterOption);
+            });
+        }
+
+        // Render cafes based on filters
+        function renderCafes() {
+            const grid = document.getElementById('cafeGrid');
+
+            // Filter cafes by location and selected attributes
+            let filteredCafes = cafeData.cafes.filter(cafe => cafe.location === currentLocation);
+
+            if (selectedFilters.length > 0) {
+                filteredCafes = filteredCafes.filter(cafe => 
+                    selectedFilters.every(filter => cafe.tags.includes(filter))
+                );
+            }
+
+            // Clear grid
+            grid.innerHTML = '';
+
+            // Show no results message
+            if (filteredCafes.length === 0) {
+                grid.innerHTML = '<div class="no-results">No cafes found matching your criteria. Try adjusting your filters.</div>';
+                return;
+            }
+
+            // Render cafe cards
+            filteredCafes.forEach(cafe => {
+                const card = createCafeCard(cafe);
+                grid.appendChild(card);
+            });
+        }
+
+        // Create cafe card element
+        function createCafeCard(cafe) {
+            const card = document.createElement('div');
+            card.className = 'cafe-card';
+
+            // Get attribute labels for tags
+            const tagLabels = {};
+            cafeData.attributes.forEach(attr => {
+                tagLabels[attr.id] = attr.label.toUpperCase();
+            });
+
+            const tagsHTML = cafe.tags.map(tag => 
+                `<span class="tag">${tagLabels[tag] || tag.toUpperCase()}</span>`
+            ).join('');
+
+            card.innerHTML = `
+                <img src="${cafe.image}" alt="${cafe.name}" class="cafe-image">
+                <div class="cafe-content">
+                    <div class="cafe-header">
+                        <div>
+                            <div class="cafe-name">${cafe.name}</div>
+                            <div class="cafe-description">${cafe.description}</div>
+                        </div>
+                        <div class="cafe-rating">
+                            <span class="star">★</span>
+                            <span>${cafe.rating}</span>
+                        </div>
+                    </div>
+                    <div class="cafe-tags">${tagsHTML}</div>
+                    <button class="view-details-btn" onclick="viewDetails(${cafe.id})">View Details</button>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // View details function
+        function viewDetails(cafeId) {
+            const cafe = cafeData.cafes.find(c => c.id === cafeId);
+            const details = `
+Cafe: ${cafe.name}
+Location: ${cafe.location}
+Address: ${cafe.address}
+Phone: ${cafe.phone}
+Hours: ${cafe.hours}
+Price Range: ${cafe.price_range}
+Rating: ${cafe.rating} ⭐
+
+${cafe.description}
+            `;
+            alert(details);
+        }
+
+        // Attach event listeners
+        function attachEventListeners() {
+            // Location tabs
+            document.querySelectorAll('.location-tab').forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    document.querySelectorAll('.location-tab').forEach(t => t.classList.remove('active'));
+                    e.target.classList.add('active');
+                    currentLocation = e.target.dataset.location;
+                    renderCafes();
+                });
+            });
+
+            // Filter checkboxes
+            document.querySelectorAll('.filter-option input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        selectedFilters.push(e.target.value);
+                    } else {
+                        selectedFilters = selectedFilters.filter(f => f !== e.target.value);
+                    }
+                    renderCafes();
+                });
+            });
+
+            // Clear filters button
+            document.getElementById('clearFilters').addEventListener('click', () => {
+                selectedFilters = [];
+                document.querySelectorAll('.filter-option input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                renderCafes();
+            });
+        }
+
+        // Detect when user returns to tab (to check for updates)
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && lastLoadTime) {
+                // Check if it's been more than 5 minutes since last load
+                const timeSinceLoad = new Date() - lastLoadTime;
+                if (timeSinceLoad > 5 * 60 * 1000) {
+                    loadCafeData(false);
+                }
+            }
+        });
+
+        // Start the app
+        init();
+    </script>
+</body>
+</html>
