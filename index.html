@@ -25,47 +25,20 @@
             box-shadow: 0 4px 12px rgba(111, 78, 55, 0.2);
         }
 
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 13.5px;
-        }
-
         .site-title {
             font-size: 23.4px;
             font-weight: 700;
+            margin-bottom: 13.5px;
             letter-spacing: 0.5px;
             color: #fff9f0;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        }
-
-        .suggest-btn {
-            background: rgba(212, 175, 55, 0.9);
-            color: #3d2817;
-            border: none;
-            padding: 8.1px 16.2px;
-            border-radius: 18px;
-            font-size: 12.6px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-family: Georgia, 'Times New Roman', serif;
-        }
-
-        .suggest-btn:hover {
-            background: #D4AF37;
-            transform: translateY(-1.8px);
-            box-shadow: 0 3px 8px rgba(212, 175, 55, 0.4);
         }
 
         /* Location Tabs */
         .location-tabs {
             display: flex;
             gap: 13.5px;
-            margin-top: 0;
+            margin-top: 13.5px;
         }
 
         .location-tab {
@@ -92,198 +65,27 @@
             border-color: #fff9f0;
         }
 
-        /* Modal Overlay */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 1000;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* Modal */
-        .modal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #fff9f0;
-            border-radius: 14.4px;
-            padding: 27px;
-            width: 90%;
-            max-width: 540px;
-            max-height: 85vh;
-            overflow-y: auto;
-            z-index: 1001;
-            box-shadow: 0 9px 36px rgba(111, 78, 55, 0.3);
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -40%);
-            }
-            to {
-                opacity: 1;
-                transform: translate(-50%, -50%);
-            }
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 18px;
-            padding-bottom: 13.5px;
-            border-bottom: 2px solid #e8dfc8;
-        }
-
-        .modal-title {
-            font-size: 19.8px;
-            font-weight: 700;
-            color: #6F4E37;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 27px;
-            color: #8B6F47;
-            cursor: pointer;
-            line-height: 1;
-            transition: color 0.3s ease;
-        }
-
-        .close-btn:hover {
-            color: #6F4E37;
-        }
-
-        .modal-description {
-            font-size: 12.6px;
-            color: #5a4a3a;
-            margin-bottom: 18px;
-            line-height: 1.5;
-        }
-
-        .form-group {
-            margin-bottom: 16.2px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 12.6px;
-            font-weight: 600;
-            color: #6F4E37;
-            margin-bottom: 5.4px;
-        }
-
-        .form-input,
-        .form-textarea {
-            width: 100%;
-            padding: 9px 10.8px;
-            border: 1.8px solid #e8dfc8;
-            border-radius: 7.2px;
-            font-size: 12.6px;
-            font-family: Georgia, 'Times New Roman', serif;
-            color: #5a4a3a;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-input:focus,
-        .form-textarea:focus {
-            outline: none;
-            border-color: #8B6F47;
-        }
-
-        .form-textarea {
-            resize: vertical;
-            min-height: 72px;
-        }
-
-        .checkbox-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 9px;
-        }
-
-        .checkbox-label {
-            display: flex;
-            align-items: center;
-            font-size: 12.6px;
-            color: #5a4a3a;
-            cursor: pointer;
-        }
-
-        .checkbox-label input {
-            width: 16.2px;
-            height: 16.2px;
-            margin-right: 7.2px;
-            cursor: pointer;
-            accent-color: #6F4E37;
-        }
-
-        .form-buttons {
-            display: flex;
-            gap: 10.8px;
-            margin-top: 22.5px;
-        }
-
-        .submit-btn {
-            flex: 1;
-            background: linear-gradient(135deg, #6F4E37 0%, #5a3d2a 100%);
-            color: #fff9f0;
-            border: none;
-            padding: 11.7px;
-            border-radius: 7.2px;
-            font-size: 13.5px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-family: Georgia, 'Times New Roman', serif;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-1.8px);
-            box-shadow: 0 4px 12px rgba(111, 78, 55, 0.3);
-        }
-
-        .cancel-btn {
-            flex: 1;
-            background: #e8dfc8;
-            color: #6F4E37;
-            border: none;
-            padding: 11.7px;
-            border-radius: 7.2px;
-            font-size: 13.5px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-family: Georgia, 'Times New Roman', serif;
-        }
-
-        .cancel-btn:hover {
-            background: #d4c4a8;
-        }
-
         /* Loading State */
         .loading {
             text-align: center;
             padding: 54px;
             color: #8B6F47;
+        }
+
+        .error-message {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px;
+            color: #856404;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .error-message h3 {
+            margin-bottom: 10px;
+            color: #6F4E37;
         }
 
         /* Main Container */
@@ -504,12 +306,6 @@
             .cafe-grid {
                 grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
             }
-
-            .header-top {
-                flex-direction: column;
-                gap: 9px;
-                align-items: flex-start;
-            }
         }
 
         @media (max-width: 768px) {
@@ -529,111 +325,16 @@
             .cafe-grid {
                 grid-template-columns: 1fr;
             }
-
-            .modal {
-                width: 95%;
-                padding: 18px;
-            }
-
-            .checkbox-grid {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
 <body>
     <!-- Header -->
     <div class="header">
-        <div class="header-top">
-            <div class="site-title">☕ CafesOfBLR</div>
-            <button class="suggest-btn" onclick="openModal()">+ Suggest a Cafe</button>
-        </div>
+        <div class="site-title">☕ CafesOfBLR</div>
         <div class="location-tabs" id="locationTabs">
             <!-- Tabs will be dynamically loaded -->
         </div>
-    </div>
-
-    <!-- Suggestion Modal -->
-    <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
-    <div class="modal" id="suggestionModal" style="display: none;">
-        <div class="modal-header">
-            <h2 class="modal-title">Suggest a Cafe</h2>
-            <button class="close-btn" onclick="closeModal()">&times;</button>
-        </div>
-        <p class="modal-description">
-            Know a great cafe we should add? Share the details below and we'll review it for inclusion in our directory.
-        </p>
-        <form id="suggestionForm" onsubmit="submitSuggestion(event)">
-            <div class="form-group">
-                <label class="form-label">Cafe Name *</label>
-                <input type="text" class="form-input" id="cafeName" required>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Location *</label>
-                <select class="form-input" id="cafeLocation" required>
-                    <option value="">Select location</option>
-                    <option value="HSR">HSR</option>
-                    <option value="Indiranagar">Indiranagar</option>
-                    <option value="Koramangala">Koramangala</option>
-                    <option value="Whitefield">Whitefield</option>
-                    <option value="Jayanagar">Jayanagar</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Address</label>
-                <input type="text" class="form-input" id="cafeAddress">
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">What makes this cafe special?</label>
-                <textarea class="form-textarea" id="cafeDescription" placeholder="Great coffee, cozy ambience, fast wifi, etc."></textarea>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Attributes (select all that apply)</label>
-                <div class="checkbox-grid">
-                    <label class="checkbox-label">
-                        <input type="checkbox" value="ambience"> Great Ambience
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" value="quiet"> Quiet
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" value="scenic"> Scenic View
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" value="open-seating"> Open Seating
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" value="outdoor"> Outdoor
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" value="wifi"> WiFi
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" value="parking"> Parking
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" value="pets"> Pet Friendly
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" value="vegan"> Vegan Options
-                    </label>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Your Email (optional)</label>
-                <input type="email" class="form-input" id="userEmail" placeholder="So we can thank you!">
-            </div>
-
-            <div class="form-buttons">
-                <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
-                <button type="submit" class="submit-btn">Submit Suggestion</button>
-            </div>
-        </form>
     </div>
 
     <!-- Main Container -->
@@ -666,80 +367,51 @@
         let selectedFilters = [];
         let lastLoadTime = null;
 
-        // Modal functions
-        function openModal() {
-            document.getElementById('modalOverlay').style.display = 'block';
-            document.getElementById('suggestionModal').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal() {
-            document.getElementById('modalOverlay').style.display = 'none';
-            document.getElementById('suggestionModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-            document.getElementById('suggestionForm').reset();
-        }
-
-        function submitSuggestion(event) {
-            event.preventDefault();
-
-            const cafeName = document.getElementById('cafeName').value;
-            const location = document.getElementById('cafeLocation').value;
-            const address = document.getElementById('cafeAddress').value;
-            const description = document.getElementById('cafeDescription').value;
-            const email = document.getElementById('userEmail').value;
-
-            // Collect selected attributes
-            const attributes = [];
-            document.querySelectorAll('.checkbox-label input:checked').forEach(checkbox => {
-                attributes.push(checkbox.value);
-            });
-
-            // Create mailto link with pre-filled content
-            const subject = encodeURIComponent('New Cafe Suggestion: ' + cafeName);
-            const body = encodeURIComponent(
-                'Cafe Name: ' + cafeName + '
-' +
-                'Location: ' + location + '
-' +
-                'Address: ' + address + '
-' +
-                'Description: ' + description + '
-' +
-                'Attributes: ' + attributes.join(', ') + '
-' +
-                'Suggested by: ' + (email || 'Anonymous') + '
-' +
-                'Date: ' + new Date().toLocaleString()
-            );
-
-            // Open email client (replace YOUR_EMAIL with your actual email)
-            window.location.href = 'mailto:your-email@example.com?subject=' + subject + '&body=' + body;
-
-            // Show success message
-            alert('Thank you for your suggestion! Your email client will open to send us the details.');
-
-            closeModal();
-        }
-
         // Initialize the app
         async function init() {
+            console.log('🚀 Initializing CafesOfBLR...');
             try {
                 await loadCafeData();
+                console.log('✅ Initialization complete');
             } catch (error) {
-                console.error('Error loading cafe data:', error);
-                document.getElementById('cafeGrid').innerHTML = 
-                    '<div class="no-results">Error loading cafe data. Please make sure cafes_database.json is in the same directory.</div>';
+                console.error('❌ Error during initialization:', error);
+                showError(error);
             }
         }
 
-        // Load cafe data with cache busting
+        // Show detailed error message
+        function showError(error) {
+            const errorHTML = `
+                <div class="error-message">
+                    <h3>⚠️ Unable to Load Cafe Data</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p><strong>Possible causes:</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>The file <code>cafes_database.json</code> is not in the same folder as index.html</li>
+                        <li>Browser security is blocking local file access (CORS policy)</li>
+                        <li>The JSON file has syntax errors</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>Solutions:</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Easy fix:</strong> Open this file using Firefox (better local file support)</li>
+                        <li><strong>OR</strong> Run a local server: <code>python -m http.server 8000</code> then visit <code>http://localhost:8000</code></li>
+                        <li>Make sure both files are in the same directory</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>Check console (F12):</strong> Press F12 and look at the Console tab for more details</p>
+                </div>
+            `;
+            document.getElementById('cafeGrid').innerHTML = errorHTML;
+            document.getElementById('filterContainer').innerHTML = '<div style="padding: 18px; font-size: 12.6px; color: #8B6F47;">Unable to load filters</div>';
+        }
+
+        // Load cafe data
         async function loadCafeData(forceRefresh = false) {
             try {
+                console.log('📥 Fetching cafe data from cafes_database.json...');
                 const timestamp = new Date().getTime();
                 const url = forceRefresh 
                     ? `cafes_database.json?t=${timestamp}` 
-                    : `cafes_database.json`;
+                    : 'cafes_database.json';
 
                 const response = await fetch(url, {
                     cache: forceRefresh ? 'no-cache' : 'default',
@@ -748,29 +420,59 @@
                     }
                 });
 
+                console.log('📡 Response status:', response.status, response.statusText);
+
                 if (!response.ok) {
-                    throw new Error('Failed to load cafe data');
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}. Make sure cafes_database.json exists in the same folder.`);
                 }
 
-                cafeData = await response.json();
+                const text = await response.text();
+                console.log('📄 Received data length:', text.length, 'characters');
+
+                try {
+                    cafeData = JSON.parse(text);
+                    console.log('✅ JSON parsed successfully');
+                    console.log('📊 Data structure:', {
+                        locations: cafeData.locations?.length || 0,
+                        cafes: cafeData.cafes?.length || 0,
+                        attributes: cafeData.attributes?.length || 0,
+                        filter_categories: cafeData.filter_categories?.length || 0
+                    });
+                } catch (parseError) {
+                    throw new Error(`Invalid JSON format: ${parseError.message}`);
+                }
+
+                if (!cafeData.cafes || cafeData.cafes.length === 0) {
+                    throw new Error('No cafes found in the database. Check your cafes_database.json file.');
+                }
+
+                if (!cafeData.locations || cafeData.locations.length === 0) {
+                    throw new Error('No locations found in the database.');
+                }
+
                 lastLoadTime = new Date();
 
                 if (!currentLocation) {
                     currentLocation = cafeData.locations[0];
+                    console.log('🎯 Default location set to:', currentLocation);
                 }
 
+                console.log('🎨 Rendering UI...');
                 renderLocationTabs();
                 renderFilters();
                 renderCafes();
                 attachEventListeners();
+                console.log('✅ UI rendered successfully');
 
             } catch (error) {
+                console.error('❌ Error loading cafe data:', error);
                 throw error;
             }
         }
 
         // Auto-refresh every 5 minutes
         setInterval(() => {
+            console.log('🔄 Auto-refresh triggered');
             loadCafeData(true);
         }, 5 * 60 * 1000);
 
@@ -786,6 +488,7 @@
                 tab.textContent = location;
                 tabsContainer.appendChild(tab);
             });
+            console.log('✅ Location tabs rendered:', cafeData.locations.length);
         }
 
         // Render filters dynamically from JSON
@@ -794,6 +497,7 @@
             filterContainer.innerHTML = '';
 
             if (cafeData.filter_categories && cafeData.filter_categories.length > 0) {
+                console.log('✅ Rendering categorized filters');
                 cafeData.filter_categories.forEach(category => {
                     const categoryDiv = document.createElement('div');
                     categoryDiv.className = 'filter-category';
@@ -830,6 +534,7 @@
                     filterContainer.appendChild(categoryDiv);
                 });
             } else if (cafeData.attributes && cafeData.attributes.length > 0) {
+                console.log('✅ Rendering flat filter list');
                 const filterGroup = document.createElement('div');
                 filterGroup.className = 'filter-group';
 
@@ -862,11 +567,13 @@
             const grid = document.getElementById('cafeGrid');
 
             let filteredCafes = cafeData.cafes.filter(cafe => cafe.location === currentLocation);
+            console.log(`🔍 Filtered ${filteredCafes.length} cafes for location: ${currentLocation}`);
 
             if (selectedFilters.length > 0) {
                 filteredCafes = filteredCafes.filter(cafe => 
                     selectedFilters.every(filter => cafe.tags.includes(filter))
                 );
+                console.log(`🔍 After filter: ${filteredCafes.length} cafes match criteria`);
             }
 
             grid.innerHTML = '';
@@ -880,6 +587,7 @@
                 const card = createCafeCard(cafe);
                 grid.appendChild(card);
             });
+            console.log(`✅ Rendered ${filteredCafes.length} cafe cards`);
         }
 
         // Create cafe card element
@@ -932,6 +640,7 @@ ${cafe.description}
                     document.querySelectorAll('.location-tab').forEach(t => t.classList.remove('active'));
                     e.target.classList.add('active');
                     currentLocation = e.target.dataset.location;
+                    console.log('📍 Location changed to:', currentLocation);
                     renderCafes();
                 });
             });
@@ -943,6 +652,7 @@ ${cafe.description}
                     } else {
                         selectedFilters = selectedFilters.filter(f => f !== e.target.value);
                     }
+                    console.log('🔧 Filters updated:', selectedFilters);
                     renderCafes();
                 });
             });
@@ -952,6 +662,7 @@ ${cafe.description}
                 document.querySelectorAll('.filter-option input[type="checkbox"]').forEach(checkbox => {
                     checkbox.checked = false;
                 });
+                console.log('🧹 Filters cleared');
                 renderCafes();
             });
         }
@@ -960,11 +671,14 @@ ${cafe.description}
             if (!document.hidden && lastLoadTime) {
                 const timeSinceLoad = new Date() - lastLoadTime;
                 if (timeSinceLoad > 5 * 60 * 1000) {
+                    console.log('👀 Tab became visible, refreshing data...');
                     loadCafeData(true);
                 }
             }
         });
 
+        // Start the app
+        console.log('🎬 Starting CafesOfBLR...');
         init();
     </script>
 </body>
