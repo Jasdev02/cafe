@@ -92,21 +92,45 @@
             border-color: #fff9f0;
         }
 
-        /* Mobile Filter Button - Hidden on desktop */
+        /* Mobile Filter Button - Below location tabs on mobile, hidden on desktop */
         .mobile-filter-btn {
+            display: none;
+            margin: 16px auto 0;
+            background: rgba(255, 249, 240, 0.2);
+            color: #fff9f0;
+            border: 1.5px solid rgba(255, 249, 240, 0.4);
+            padding: 9px 24px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: Georgia, 'Times New Roman', serif;
+            width: fit-content;
+        }
+
+        .mobile-filter-btn:hover {
+            background: rgba(255, 249, 240, 0.3);
+            border-color: rgba(255, 249, 240, 0.6);
+        }
+
+        /* Mobile Suggest Button - Bottom right FAB on mobile, hidden on desktop */
+        .mobile-suggest-btn {
             display: none;
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background: linear-gradient(135deg, #6F4E37 0%, #5a3d2a 100%);
-            color: #fff9f0;
+            background: linear-gradient(135deg, #D4AF37 0%, #C19A2E 100%);
+            color: #3d2817;
             border: none;
             padding: 14px 24px;
             border-radius: 30px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 4px 16px rgba(111, 78, 55, 0.4);
+            box-shadow: 0 4px 16px rgba(212, 175, 55, 0.4);
             z-index: 100;
             transition: all 0.3s ease;
             text-transform: uppercase;
@@ -114,9 +138,9 @@
             font-family: Georgia, 'Times New Roman', serif;
         }
 
-        .mobile-filter-btn:hover {
+        .mobile-suggest-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(111, 78, 55, 0.5);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
         }
 
         /* Modal Overlay */
@@ -602,12 +626,21 @@
                 grid-template-columns: 1fr;
             }
 
-            /* Hide sidebar on mobile, show filter button instead */
+            /* Hide sidebar and desktop suggest button on mobile */
             .sidebar {
                 display: none;
             }
 
+            .suggest-btn {
+                display: none;
+            }
+
+            /* Show mobile-specific buttons */
             .mobile-filter-btn {
+                display: block;
+            }
+
+            .mobile-suggest-btn {
                 display: block;
             }
 
@@ -632,11 +665,15 @@
         <div class="location-tabs" id="locationTabs">
             <!-- Tabs will be dynamically loaded -->
         </div>
+        <!-- Mobile Filter Button (centered below location tabs, visible only on mobile) -->
+        <button class="mobile-filter-btn" id="mobileFilterBtn" onclick="openFilterModal()">
+            ☰ Attributes
+        </button>
     </div>
 
-    <!-- Mobile Filter Button (visible only on mobile) -->
-    <button class="mobile-filter-btn" id="mobileFilterBtn" onclick="openFilterModal()">
-        ☰ Attributes
+    <!-- Mobile Suggest Button (bottom-right FAB, visible only on mobile) -->
+    <button class="mobile-suggest-btn" id="mobileSuggestBtn" onclick="openSuggestionModal()">
+        + Suggest
     </button>
 
     <!-- Suggestion Modal -->
