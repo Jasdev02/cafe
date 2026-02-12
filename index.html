@@ -22,37 +22,12 @@
             color: white;
             padding: 20px 40px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: relative;
         }
 
         .site-title {
             font-size: 24px;
             font-weight: 600;
             margin-bottom: 15px;
-        }
-
-        .last-updated {
-            position: absolute;
-            top: 20px;
-            right: 40px;
-            font-size: 12px;
-            opacity: 0.8;
-        }
-
-        .refresh-btn {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            margin-left: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .refresh-btn:hover {
-            background: rgba(255,255,255,0.3);
         }
 
         /* Location Tabs */
@@ -217,31 +192,10 @@
             color: white;
         }
 
-        .cafe-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 8px;
-        }
-
         .cafe-name {
             font-size: 18px;
             font-weight: 600;
             margin-bottom: 8px;
-        }
-
-        .cafe-rating {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 14px;
-            background: rgba(255,255,255,0.2);
-            padding: 4px 8px;
-            border-radius: 6px;
-        }
-
-        .star {
-            color: #ffd700;
         }
 
         .cafe-description {
@@ -292,30 +246,6 @@
             font-size: 18px;
         }
 
-        .update-notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #4c3fff;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            display: none;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateY(100px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
         /* Responsive Design */
         @media (max-width: 1024px) {
             .container {
@@ -337,11 +267,6 @@
                 padding: 15px 20px;
             }
 
-            .last-updated {
-                position: static;
-                margin-top: 10px;
-            }
-
             .container {
                 padding: 20px;
             }
@@ -361,18 +286,9 @@
     <!-- Header -->
     <div class="header">
         <div class="site-title">CafesOfBLR</div>
-        <div class="last-updated">
-            Last updated: <span id="lastUpdated">Loading...</span>
-            <button class="refresh-btn" onclick="forceRefresh()">🔄 Refresh</button>
-        </div>
         <div class="location-tabs" id="locationTabs">
             <!-- Tabs will be dynamically loaded -->
         </div>
-    </div>
-
-    <!-- Update Notification -->
-    <div class="update-notification" id="updateNotification">
-        ✅ Data updated successfully!
     </div>
 
     <!-- Main Container -->
@@ -442,57 +358,19 @@
                     currentLocation = cafeData.locations[0];
                 }
 
-                updateLastUpdatedTime();
                 renderLocationTabs();
-                renderFilters(); // Now reads from JSON!
+                renderFilters();
                 renderCafes();
                 attachEventListeners();
-
-                if (forceRefresh) {
-                    showUpdateNotification();
-                }
 
             } catch (error) {
                 throw error;
             }
         }
 
-        // Force refresh function
-        async function forceRefresh() {
-            const btn = event.target;
-            btn.disabled = true;
-            btn.textContent = '🔄 Refreshing...';
-
-            try {
-                await loadCafeData(true);
-            } finally {
-                btn.disabled = false;
-                btn.textContent = '🔄 Refresh';
-            }
-        }
-
-        // Show update notification
-        function showUpdateNotification() {
-            const notification = document.getElementById('updateNotification');
-            notification.style.display = 'block';
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3000);
-        }
-
-        // Update last updated time
-        function updateLastUpdatedTime() {
-            const lastUpdatedEl = document.getElementById('lastUpdated');
-            if (cafeData && cafeData.metadata && cafeData.metadata.last_updated) {
-                lastUpdatedEl.textContent = cafeData.metadata.last_updated;
-            } else {
-                lastUpdatedEl.textContent = new Date().toLocaleDateString();
-            }
-        }
-
         // Auto-refresh every 5 minutes
         setInterval(() => {
-            loadCafeData(false);
+            loadCafeData(true);
         }, 5 * 60 * 1000);
 
         // Render location tabs
@@ -509,7 +387,7 @@
             });
         }
 
-        // ✨ NEW: Render filters dynamically from JSON
+        // Render filters dynamically from JSON
         function renderFilters() {
             const filterContainer = document.getElementById('filterContainer');
             filterContainer.innerHTML = '';
@@ -623,16 +501,8 @@
             card.innerHTML = `
                 <img src="${cafe.image}" alt="${cafe.name}" class="cafe-image">
                 <div class="cafe-content">
-                    <div class="cafe-header">
-                        <div>
-                            <div class="cafe-name">${cafe.name}</div>
-                            <div class="cafe-description">${cafe.description}</div>
-                        </div>
-                        <div class="cafe-rating">
-                            <span class="star">★</span>
-                            <span>${cafe.rating}</span>
-                        </div>
-                    </div>
+                    <div class="cafe-name">${cafe.name}</div>
+                    <div class="cafe-description">${cafe.description}</div>
                     <div class="cafe-tags">${tagsHTML}</div>
                     <button class="view-details-btn" onclick="viewDetails(${cafe.id})">View Details</button>
                 </div>
@@ -651,7 +521,6 @@ Address: ${cafe.address}
 Phone: ${cafe.phone}
 Hours: ${cafe.hours}
 Price Range: ${cafe.price_range}
-Rating: ${cafe.rating} ⭐
 
 ${cafe.description}
             `;
@@ -692,12 +561,12 @@ ${cafe.description}
             });
         }
 
-        // Detect when user returns to tab
+        // Detect when user returns to tab and auto-refresh if stale
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden && lastLoadTime) {
                 const timeSinceLoad = new Date() - lastLoadTime;
                 if (timeSinceLoad > 5 * 60 * 1000) {
-                    loadCafeData(false);
+                    loadCafeData(true);
                 }
             }
         });
