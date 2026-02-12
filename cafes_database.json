@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "version": "1.0",
-    "last_updated": "2026-02-12",
-    "total_cafes": 14
+    "version": "1.1",
+    "last_updated": "2026-02-13",
+    "total_cafes": 12
   },
   "locations": [
     "HSR",
@@ -11,51 +11,131 @@
     "Whitefield",
     "Jayanagar"
   ],
+  "filter_categories": [
+    {
+      "id": "ambience",
+      "name": "Ambience",
+      "filters": [
+        {
+          "id": "ambience",
+          "label": "Great Ambience",
+          "description": "Great ambience and decor"
+        },
+        {
+          "id": "quiet",
+          "label": "Quiet",
+          "description": "Quiet atmosphere for work"
+        },
+        {
+          "id": "scenic",
+          "label": "Scenic View",
+          "description": "Scenic views"
+        }
+      ]
+    },
+    {
+      "id": "seating",
+      "name": "Seating",
+      "filters": [
+        {
+          "id": "open-seating",
+          "label": "Open Seating",
+          "description": "Open seating arrangement"
+        },
+        {
+          "id": "outdoor",
+          "label": "Outdoor",
+          "description": "Outdoor seating area"
+        }
+      ]
+    },
+    {
+      "id": "amenities",
+      "name": "Amenities",
+      "filters": [
+        {
+          "id": "wifi",
+          "label": "WiFi",
+          "description": "Free WiFi available"
+        },
+        {
+          "id": "parking",
+          "label": "Parking",
+          "description": "Parking available"
+        },
+        {
+          "id": "pets",
+          "label": "Pet Friendly",
+          "description": "Pets allowed"
+        }
+      ]
+    },
+    {
+      "id": "food",
+      "name": "Food Options",
+      "filters": [
+        {
+          "id": "vegan",
+          "label": "Vegan Options",
+          "description": "Vegan options available"
+        }
+      ]
+    }
+  ],
   "attributes": [
     {
       "id": "ambience",
       "label": "Ambience",
-      "description": "Great ambience and decor"
+      "description": "Great ambience and decor",
+      "category": "ambience"
     },
     {
       "id": "open-seating",
       "label": "Open Seating",
-      "description": "Open seating arrangement"
+      "description": "Open seating arrangement",
+      "category": "seating"
     },
     {
       "id": "parking",
-      "label": "Park",
-      "description": "Parking available"
+      "label": "Parking",
+      "description": "Parking available",
+      "category": "amenities"
     },
     {
       "id": "wifi",
       "label": "WiFi",
-      "description": "Free WiFi available"
+      "description": "Free WiFi available",
+      "category": "amenities"
     },
     {
       "id": "outdoor",
-      "label": "Outdoors",
-      "description": "Outdoor seating area"
+      "label": "Outdoor",
+      "description": "Outdoor seating area",
+      "category": "seating"
     },
     {
       "id": "vegan",
-      "label": "Vegan",
-      "description": "Vegan options available"
+      "label": "Vegan Options",
+      "description": "Vegan options available",
+      "category": "food"
     },
     {
       "id": "quiet",
       "label": "Quiet",
-      "description": "Quiet atmosphere for work"
+      "description": "Quiet atmosphere for work",
+      "category": "ambience"
     },
     {
       "id": "pets",
-      "label": "Pets Friendly",
-      "description": "Pets allowed"
+      "label": "Pet Friendly",
+      "description": "Pets allowed",
+      "category": "amenities"
     },
     {
       "id": "scenic",
-      "label": "Scenic",
-      "description": "Scenic views"
+      "label": "Scenic View",
+      "description": "Scenic views",
+      "category": "ambience"
     }
   ],
   "cafes": [
@@ -262,40 +342,6 @@
         "ambience",
         "parking"
       ]
-    },
-    {
-  "id": 13,
-  "name": "Muziris",
-  "description": "Cafe with open air seating",
-  "image": "na",
-  "rating": 5,
-  "location": "Indiranagar",
-  "address": "CMH",
-  "phone": "+91 80 0000 0000",
-  "hours": "9:00 AM - 9:00 PM",
-  "price_range": "₹₹",
-  "tags": [
-    "ambience",
-    "open-seating"
-  ]
-},
-    {
-  "id": 1,
-  "name": "Paper & Pie",
-  "description": "White soothing interiors",
-  "image": "na",
-  "rating": 5,
-  "location": "Indiranagar",
-  "address": "100ft road",
-  "phone": "+91 80 0000 0000",
-  "hours": "9:00 AM - 9:00 PM",
-  "price_range": "₹₹",
-  "tags": [
-    "ambience",
-    "parking",
-    "wifi",
-    "outdoor"
-  ]
-}
+    }
   ]
 }

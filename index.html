@@ -139,8 +139,24 @@
             text-decoration: underline;
         }
 
+        /* Filter Categories */
+        .filter-category {
+            margin-bottom: 25px;
+        }
+
+        .category-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
         .filter-group {
-            margin-bottom: 20px;
+            margin-bottom: 0;
         }
 
         .filter-option {
@@ -370,8 +386,68 @@
                 <button class="clear-btn" id="clearFilters">Clear all</button>
             </div>
 
-            <div class="filter-group" id="filterGroup">
-                <!-- Filters will be dynamically loaded -->
+            <!-- Ambience Category -->
+            <div class="filter-category">
+                <div class="category-title">Ambience</div>
+                <div class="filter-group">
+                    <div class="filter-option">
+                        <input type="checkbox" id="ambience" value="ambience">
+                        <label for="ambience">Great Ambience</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="quiet" value="quiet">
+                        <label for="quiet">Quiet</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="scenic" value="scenic">
+                        <label for="scenic">Scenic View</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seating Category -->
+            <div class="filter-category">
+                <div class="category-title">Seating</div>
+                <div class="filter-group">
+                    <div class="filter-option">
+                        <input type="checkbox" id="open-seating" value="open-seating">
+                        <label for="open-seating">Open Seating</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="outdoor" value="outdoor">
+                        <label for="outdoor">Outdoor</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Amenities Category -->
+            <div class="filter-category">
+                <div class="category-title">Amenities</div>
+                <div class="filter-group">
+                    <div class="filter-option">
+                        <input type="checkbox" id="wifi" value="wifi">
+                        <label for="wifi">WiFi</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="parking" value="parking">
+                        <label for="parking">Parking</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="pets" value="pets">
+                        <label for="pets">Pet Friendly</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Food Options Category -->
+            <div class="filter-category">
+                <div class="category-title">Food Options</div>
+                <div class="filter-group">
+                    <div class="filter-option">
+                        <input type="checkbox" id="vegan" value="vegan">
+                        <label for="vegan">Vegan Options</label>
+                    </div>
+                </div>
             </div>
         </aside>
 
@@ -386,7 +462,6 @@
         let cafeData = null;
         let currentLocation = '';
         let selectedFilters = [];
-        let lastLoadTime = null;
 
         // Initialize the app
         async function init() {
@@ -402,7 +477,6 @@
         // Load cafe data with cache busting
         async function loadCafeData(forceRefresh = false) {
             try {
-                // Add timestamp to prevent caching
                 const timestamp = new Date().getTime();
                 const url = forceRefresh 
                     ? `cafes_database.json?t=${timestamp}` 
@@ -422,19 +496,15 @@
                 cafeData = await response.json();
                 lastLoadTime = new Date();
 
-                // Set initial location if not set
                 if (!currentLocation) {
                     currentLocation = cafeData.locations[0];
                 }
 
-                // Update UI
                 updateLastUpdatedTime();
                 renderLocationTabs();
-                renderFilters();
                 renderCafes();
                 attachEventListeners();
 
-                // Show notification if force refresh
                 if (forceRefresh) {
                     showUpdateNotification();
                 }
@@ -477,7 +547,7 @@
             }
         }
 
-        // Auto-refresh every 5 minutes (optional)
+        // Auto-refresh every 5 minutes
         setInterval(() => {
             loadCafeData(false);
         }, 5 * 60 * 1000);
@@ -496,37 +566,10 @@
             });
         }
 
-        // Render filter checkboxes
-        function renderFilters() {
-            const filterGroup = document.getElementById('filterGroup');
-            filterGroup.innerHTML = '';
-
-            cafeData.attributes.forEach(attribute => {
-                const filterOption = document.createElement('div');
-                filterOption.className = 'filter-option';
-
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.id = attribute.id;
-                checkbox.value = attribute.id;
-                checkbox.checked = selectedFilters.includes(attribute.id);
-
-                const label = document.createElement('label');
-                label.htmlFor = attribute.id;
-                label.textContent = attribute.label;
-                label.title = attribute.description;
-
-                filterOption.appendChild(checkbox);
-                filterOption.appendChild(label);
-                filterGroup.appendChild(filterOption);
-            });
-        }
-
         // Render cafes based on filters
         function renderCafes() {
             const grid = document.getElementById('cafeGrid');
 
-            // Filter cafes by location and selected attributes
             let filteredCafes = cafeData.cafes.filter(cafe => cafe.location === currentLocation);
 
             if (selectedFilters.length > 0) {
@@ -535,16 +578,13 @@
                 );
             }
 
-            // Clear grid
             grid.innerHTML = '';
 
-            // Show no results message
             if (filteredCafes.length === 0) {
                 grid.innerHTML = '<div class="no-results">No cafes found matching your criteria. Try adjusting your filters.</div>';
                 return;
             }
 
-            // Render cafe cards
             filteredCafes.forEach(cafe => {
                 const card = createCafeCard(cafe);
                 grid.appendChild(card);
@@ -556,7 +596,6 @@
             const card = document.createElement('div');
             card.className = 'cafe-card';
 
-            // Get attribute labels for tags
             const tagLabels = {};
             cafeData.attributes.forEach(attr => {
                 tagLabels[attr.id] = attr.label.toUpperCase();
@@ -638,10 +677,9 @@ ${cafe.description}
             });
         }
 
-        // Detect when user returns to tab (to check for updates)
+        // Detect when user returns to tab
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden && lastLoadTime) {
-                // Check if it's been more than 5 minutes since last load
                 const timeSinceLoad = new Date() - lastLoadTime;
                 if (timeSinceLoad > 5 * 60 * 1000) {
                     loadCafeData(false);
