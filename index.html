@@ -695,26 +695,21 @@
                 attributes.push(checkbox.value);
             });
 
-            // Create suggestion object
-            const suggestion = {
-                cafeName,
-                location,
-                address,
-                description,
-                attributes,
-                email,
-                timestamp: new Date().toISOString()
-            };
-
             // Create mailto link with pre-filled content
             const subject = encodeURIComponent('New Cafe Suggestion: ' + cafeName);
             const body = encodeURIComponent(
-                'Cafe Name: ' + cafeName + '\n' +
-                'Location: ' + location + '\n' +
-                'Address: ' + address + '\n' +
-                'Description: ' + description + '\n' +
-                'Attributes: ' + attributes.join(', ') + '\n' +
-                'Suggested by: ' + (email || 'Anonymous') + '\n' +
+                'Cafe Name: ' + cafeName + '
+' +
+                'Location: ' + location + '
+' +
+                'Address: ' + address + '
+' +
+                'Description: ' + description + '
+' +
+                'Attributes: ' + attributes.join(', ') + '
+' +
+                'Suggested by: ' + (email || 'Anonymous') + '
+' +
                 'Date: ' + new Date().toLocaleString()
             );
 
@@ -743,8 +738,8 @@
             try {
                 const timestamp = new Date().getTime();
                 const url = forceRefresh 
-                    ? \`cafes_database.json?t=\${timestamp}\` 
-                    : \`cafes_database.json\`;
+                    ? `cafes_database.json?t=${timestamp}` 
+                    : `cafes_database.json`;
 
                 const response = await fetch(url, {
                     cache: forceRefresh ? 'no-cache' : 'default',
@@ -786,7 +781,7 @@
 
             cafeData.locations.forEach((location) => {
                 const tab = document.createElement('button');
-                tab.className = \`location-tab \${location === currentLocation ? 'active' : ''}\`;
+                tab.className = `location-tab ${location === currentLocation ? 'active' : ''}`;
                 tab.dataset.location = location;
                 tab.textContent = location;
                 tabsContainer.appendChild(tab);
@@ -898,18 +893,18 @@
             });
 
             const tagsHTML = cafe.tags.map(tag => 
-                \`<span class="tag">\${tagLabels[tag] || tag.toUpperCase()}</span>\`
+                `<span class="tag">${tagLabels[tag] || tag.toUpperCase()}</span>`
             ).join('');
 
-            card.innerHTML = \`
-                <img src="\${cafe.image}" alt="\${cafe.name}" class="cafe-image">
+            card.innerHTML = `
+                <img src="${cafe.image}" alt="${cafe.name}" class="cafe-image">
                 <div class="cafe-content">
-                    <div class="cafe-name">\${cafe.name}</div>
-                    <div class="cafe-description">\${cafe.description}</div>
-                    <div class="cafe-tags">\${tagsHTML}</div>
-                    <button class="view-details-btn" onclick="viewDetails(\${cafe.id})">View Details</button>
+                    <div class="cafe-name">${cafe.name}</div>
+                    <div class="cafe-description">${cafe.description}</div>
+                    <div class="cafe-tags">${tagsHTML}</div>
+                    <button class="view-details-btn" onclick="viewDetails(${cafe.id})">View Details</button>
                 </div>
-            \`;
+            `;
 
             return card;
         }
@@ -917,16 +912,16 @@
         // View details function
         function viewDetails(cafeId) {
             const cafe = cafeData.cafes.find(c => c.id === cafeId);
-            const details = \`
-Cafe: \${cafe.name}
-Location: \${cafe.location}
-Address: \${cafe.address}
-Phone: \${cafe.phone}
-Hours: \${cafe.hours}
-Price Range: \${cafe.price_range}
+            const details = `
+Cafe: ${cafe.name}
+Location: ${cafe.location}
+Address: ${cafe.address}
+Phone: ${cafe.phone}
+Hours: ${cafe.hours}
+Price Range: ${cafe.price_range}
 
-\${cafe.description}
-            \`;
+${cafe.description}
+            `;
             alert(details);
         }
 
