@@ -2,7 +2,7 @@
   "metadata": {
     "version": "1.0",
     "last_updated": "2026-02-12",
-    "total_cafes": 13
+    "total_cafes": 14
   },
   "locations": [
     "HSR",
@@ -277,6 +277,24 @@
   "tags": [
     "ambience",
     "open-seating"
+  ]
+},
+    {
+  "id": 1,
+  "name": "Paper & Pie",
+  "description": "White soothing interiors",
+  "image": "na",
+  "rating": 5,
+  "location": "Indiranagar",
+  "address": "100ft road",
+  "phone": "+91 80 0000 0000",
+  "hours": "9:00 AM - 9:00 PM",
+  "price_range": "₹₹",
+  "tags": [
+    "ambience",
+    "parking",
+    "wifi",
+    "outdoor"
   ]
 }
   ]
