@@ -60,16 +60,48 @@
         },
         {
           "id": "parking",
-          "label": "Parking",
+          "label": "Car Parking",
           "description": "Parking available"
         },
         {
+          "id": "valet",
+          "label": "Valet Parking",
+          "description": "Valet Parking Available"
+        },
+        {
           "id": "pets",
-          "label": "Pet Friendly",
+          "label": "Pet-Friendly",
           "description": "Pets allowed"
         }
       ]
     },
+        {
+      "id": "social",
+      "name": "Social",
+      "filters": [
+        {
+          "id": "event",
+          "label": "Host Events",
+          "description": "Host Events"
+        },
+        {
+          "id": "books",
+          "label": "Library",
+          "description": "Books Available"
+        },
+        {
+          "id": "boardgames",
+          "label": "Boardgames",
+          "description": "Boardgames"
+        },
+        {
+          "id": "private",
+          "label": "Private Sections",
+          "description": "For group gatherings"
+        }
+      ]
+    },
+
     {
       "id": "food",
       "name": "Food Options",
