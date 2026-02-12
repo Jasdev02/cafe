@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CafesOfBLR - Cafe Directory</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #4c3fff 0%, #3d2fd9 100%);
+            color: white;
+            padding: 20px 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .site-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* Location Tabs */
+        .location-tabs {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .location-tab {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .location-tab:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .location-tab.active {
+            background: white;
+            color: #4c3fff;
+            font-weight: 500;
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 40px;
+            gap: 30px;
+        }
+
+        /* Sidebar Filters */
+        .sidebar {
+            width: 280px;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            height: fit-content;
+            position: sticky;
+            top: 30px;
+        }
+
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .filter-title {
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .clear-btn {
+            color: #4c3fff;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .clear-btn:hover {
+            text-decoration: underline;
+        }
+
+        .filter-group {
+            margin-bottom: 20px;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            cursor: pointer;
+        }
+
+        .filter-option input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: #4c3fff;
+        }
+
+        .filter-option label {
+            cursor: pointer;
+            font-size: 15px;
+            color: #333;
+        }
+
+        /* Cafe Grid */
+        .cafe-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            align-content: start;
+        }
+
+        /* Cafe Card */
+        .cafe-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .cafe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .cafe-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background-color: #e0e0e0;
+        }
+
+        .cafe-content {
+            padding: 20px;
+            background: #2c3e50;
+            color: white;
+        }
+
+        .cafe-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .cafe-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cafe-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .star {
+            color: #ffd700;
+        }
+
+        .cafe-description {
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .cafe-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .tag {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .view-details-btn {
+            width: 100%;
+            background: #4c3fff;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .view-details-btn:hover {
+            background: #3d2fd9;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+            font-size: 18px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+            }
+
+            .cafe-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .location-tabs {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .cafe-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="site-title">CafesOfBLR</div>
+        <div class="location-tabs">
+            <button class="location-tab active" data-location="HSR">HSR</button>
+            <button class="location-tab" data-location="Indiranagar">Indiranagar</button>
+            <button class="location-tab" data-location="Koramangala">Koramangala</button>
+            <button class="location-tab" data-location="Whitefield">Whitefield</button>
+            <button class="location-tab" data-location="Jayanagar">Jayanagar</button>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar Filters -->
+        <aside class="sidebar">
+            <div class="filter-header">
+                <div class="filter-title">
+                    <span>☰</span> Filters
+                </div>
+                <button class="clear-btn" id="clearFilters">Clear all</button>
+            </div>
+
+            <div class="filter-group">
+                <div class="filter-option">
+                    <input type="checkbox" id="ambience" value="ambience">
+                    <label for="ambience">Ambience</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="open-seating" value="open-seating">
+                    <label for="open-seating">Open Seating</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="parking" value="parking">
+                    <label for="parking">Park</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="wifi" value="wifi">
+                    <label for="wifi">WiFi</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="outdoor" value="outdoor">
+                    <label for="outdoor">Outdoors</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="vegan" value="vegan">
+                    <label for="vegan">Vegan</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="quiet" value="quiet">
+                    <label for="quiet">Quiet</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="pets" value="pets">
+                    <label for="pets">Pets Friendly</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="scenic" value="scenic">
+                    <label for="scenic">Scenic</label>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Cafe Grid -->
+        <main class="cafe-grid" id="cafeGrid">
+            <!-- Cafe cards will be dynamically generated here -->
+        </main>
+    </div>
+
+    <script>
+        // Sample cafe data
+        const cafes = [
+            {
+                id: 1,
+                name: "Third Wave Coffee",
+                description: "Artisanal brews & peaceful workspace vibes.",
+                image: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&h=400&fit=crop",
+                rating: 4.8,
+                location: "HSR",
+                tags: ["wifi", "outdoor", "ambience"]
+            },
+            {
+                id: 2,
+                name: "The Caffeine Baar",
+                description: "Farm to cup specialty coffee with great bakes.",
+                image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&h=400&fit=crop",
+                rating: 4.5,
+                location: "HSR",
+                tags: ["vegan", "quiet", "ambience"]
+            },
+            {
+                id: 3,
+                name: "Glen's Bakehouse",
+                description: "Legendary red velvet and courtyard seating.",
+                image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&h=400&fit=crop",
+                rating: 4.2,
+                location: "Indiranagar",
+                tags: ["outdoor", "ambience", "parking"]
+            },
+            {
+                id: 4,
+                name: "Maverick & Farmer",
+                description: "Innovation focused coffee alongside a lush park.",
+                image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&h=400&fit=crop",
+                rating: 4.0,
+                location: "HSR",
+                tags: ["scenic", "pets", "outdoor"]
+            },
+            {
+                id: 5,
+                name: "Blue Tokai Coffee Roasters",
+                description: "Single-origin beans roasted to perfection.",
+                image: "https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600&h=400&fit=crop",
+                rating: 4.7,
+                location: "Indiranagar",
+                tags: ["wifi", "quiet", "ambience"]
+            },
+            {
+                id: 6,
+                name: "Dyu Art Cafe",
+                description: "Art gallery meets specialty coffee.",
+                image: "https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=600&h=400&fit=crop",
+                rating: 4.3,
+                location: "Koramangala",
+                tags: ["ambience", "wifi", "open-seating"]
+            },
+            {
+                id: 7,
+                name: "Hole in the Wall Cafe",
+                description: "Cozy corner with exceptional breakfast menu.",
+                image: "https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=600&h=400&fit=crop",
+                rating: 4.6,
+                location: "Koramangala",
+                tags: ["vegan", "quiet", "parking"]
+            },
+            {
+                id: 8,
+                name: "The Humming Tree",
+                description: "Live music venue with great coffee.",
+                image: "https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=600&h=400&fit=crop",
+                rating: 4.4,
+                location: "Indiranagar",
+                tags: ["outdoor", "ambience", "pets"]
+            },
+            {
+                id: 9,
+                name: "Matteo Coffea",
+                description: "European style cafe with garden seating.",
+                image: "https://images.unsplash.com/photo-1559496417-e7f25c6961f9?w=600&h=400&fit=crop",
+                rating: 4.5,
+                location: "Whitefield",
+                tags: ["scenic", "outdoor", "parking"]
+            },
+            {
+                id: 10,
+                name: "Cafe Thulp",
+                description: "Quirky interiors and instagram-worthy treats.",
+                image: "https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=600&h=400&fit=crop",
+                rating: 4.1,
+                location: "Whitefield",
+                tags: ["ambience", "wifi", "vegan"]
+            },
+            {
+                id: 11,
+                name: "Lazy Suzy",
+                description: "Mediterranean menu in a garden setting.",
+                image: "https://images.unsplash.com/photo-1517487881594-2787fef5ebf7?w=600&h=400&fit=crop",
+                rating: 4.6,
+                location: "Jayanagar",
+                tags: ["outdoor", "scenic", "pets"]
+            },
+            {
+                id: 12,
+                name: "The Filter Coffee",
+                description: "Traditional South Indian filter kaapi perfected.",
+                image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&h=400&fit=crop",
+                rating: 4.8,
+                location: "Jayanagar",
+                tags: ["quiet", "ambience", "parking"]
+            }
+        ];
+
+        // State management
+        let currentLocation = 'HSR';
+        let selectedFilters = [];
+
+        // Initialize the app
+        function init() {
+            renderCafes();
+            attachEventListeners();
+        }
+
+        // Render cafes based on filters
+        function renderCafes() {
+            const grid = document.getElementById('cafeGrid');
+
+            // Filter cafes by location and selected attributes
+            let filteredCafes = cafes.filter(cafe => cafe.location === currentLocation);
+
+            if (selectedFilters.length > 0) {
+                filteredCafes = filteredCafes.filter(cafe => 
+                    selectedFilters.every(filter => cafe.tags.includes(filter))
+                );
+            }
+
+            // Clear grid
+            grid.innerHTML = '';
+
+            // Show no results message
+            if (filteredCafes.length === 0) {
+                grid.innerHTML = '<div class="no-results">No cafes found matching your criteria. Try adjusting your filters.</div>';
+                return;
+            }
+
+            // Render cafe cards
+            filteredCafes.forEach(cafe => {
+                const card = createCafeCard(cafe);
+                grid.appendChild(card);
+            });
+        }
+
+        // Create cafe card element
+        function createCafeCard(cafe) {
+            const card = document.createElement('div');
+            card.className = 'cafe-card';
+
+            const tagLabels = {
+                'wifi': 'WIFI',
+                'outdoor': 'OUTDOOR',
+                'ambience': 'AMBIENCE',
+                'vegan': 'VEGAN',
+                'quiet': 'QUIET',
+                'parking': 'PARKING',
+                'pets': 'PETS',
+                'scenic': 'SCENIC',
+                'open-seating': 'OPEN SEATING'
+            };
+
+            const tagsHTML = cafe.tags.map(tag => 
+                `<span class="tag">${tagLabels[tag] || tag.toUpperCase()}</span>`
+            ).join('');
+
+            card.innerHTML = `
+                <img src="${cafe.image}" alt="${cafe.name}" class="cafe-image">
+                <div class="cafe-content">
+                    <div class="cafe-header">
+                        <div>
+                            <div class="cafe-name">${cafe.name}</div>
+                            <div class="cafe-description">${cafe.description}</div>
+                        </div>
+                        <div class="cafe-rating">
+                            <span class="star">★</span>
+                            <span>${cafe.rating}</span>
+                        </div>
+                    </div>
+                    <div class="cafe-tags">${tagsHTML}</div>
+                    <button class="view-details-btn" onclick="viewDetails(${cafe.id})">View Details</button>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // View details function (placeholder)
+        function viewDetails(cafeId) {
+            const cafe = cafes.find(c => c.id === cafeId);
+            alert(`Viewing details for: ${cafe.name}
+
+In a full implementation, this would navigate to a detailed page or open a modal with more information about the cafe.`);
+        }
+
+        // Attach event listeners
+        function attachEventListeners() {
+            // Location tabs
+            document.querySelectorAll('.location-tab').forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    document.querySelectorAll('.location-tab').forEach(t => t.classList.remove('active'));
+                    e.target.classList.add('active');
+                    currentLocation = e.target.dataset.location;
+                    renderCafes();
+                });
+            });
+
+            // Filter checkboxes
+            document.querySelectorAll('.filter-option input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        selectedFilters.push(e.target.value);
+                    } else {
+                        selectedFilters = selectedFilters.filter(f => f !== e.target.value);
+                    }
+                    renderCafes();
+                });
+            });
+
+            // Clear filters button
+            document.getElementById('clearFilters').addEventListener('click', () => {
+                selectedFilters = [];
+                document.querySelectorAll('.filter-option input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                renderCafes();
+            });
+        }
+
+        // Start the app
+        init();
+    </script>
+</body>
+</html>

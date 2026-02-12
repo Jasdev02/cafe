@@ -1,0 +1,283 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "last_updated": "2026-02-12",
+    "total_cafes": 13
+  },
+  "locations": [
+    "HSR",
+    "Indiranagar",
+    "Koramangala",
+    "Whitefield",
+    "Jayanagar"
+  ],
+  "attributes": [
+    {
+      "id": "ambience",
+      "label": "Ambience",
+      "description": "Great ambience and decor"
+    },
+    {
+      "id": "open-seating",
+      "label": "Open Seating",
+      "description": "Open seating arrangement"
+    },
+    {
+      "id": "parking",
+      "label": "Park",
+      "description": "Parking available"
+    },
+    {
+      "id": "wifi",
+      "label": "WiFi",
+      "description": "Free WiFi available"
+    },
+    {
+      "id": "outdoor",
+      "label": "Outdoors",
+      "description": "Outdoor seating area"
+    },
+    {
+      "id": "vegan",
+      "label": "Vegan",
+      "description": "Vegan options available"
+    },
+    {
+      "id": "quiet",
+      "label": "Quiet",
+      "description": "Quiet atmosphere for work"
+    },
+    {
+      "id": "pets",
+      "label": "Pets Friendly",
+      "description": "Pets allowed"
+    },
+    {
+      "id": "scenic",
+      "label": "Scenic",
+      "description": "Scenic views"
+    }
+  ],
+  "cafes": [
+    {
+      "id": 1,
+      "name": "Third Wave Coffee",
+      "description": "Artisanal brews & peaceful workspace vibes.",
+      "image": "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&h=400&fit=crop",
+      "rating": 4.8,
+      "location": "HSR",
+      "address": "17th Cross, HSR Layout Sector 3",
+      "phone": "+91 80 1234 5678",
+      "hours": "8:00 AM - 11:00 PM",
+      "price_range": "₹₹",
+      "tags": [
+        "wifi",
+        "outdoor",
+        "ambience"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "The Caffeine Baar",
+      "description": "Farm to cup specialty coffee with great bakes.",
+      "image": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&h=400&fit=crop",
+      "rating": 4.5,
+      "location": "HSR",
+      "address": "27th Main Road, HSR Layout",
+      "phone": "+91 80 2345 6789",
+      "hours": "7:30 AM - 10:00 PM",
+      "price_range": "₹₹",
+      "tags": [
+        "vegan",
+        "quiet",
+        "ambience"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Glen's Bakehouse",
+      "description": "Legendary red velvet and courtyard seating.",
+      "image": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&h=400&fit=crop",
+      "rating": 4.2,
+      "location": "Indiranagar",
+      "address": "100 Feet Road, Indiranagar",
+      "phone": "+91 80 3456 7890",
+      "hours": "8:00 AM - 11:30 PM",
+      "price_range": "₹₹₹",
+      "tags": [
+        "outdoor",
+        "ambience",
+        "parking"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Maverick & Farmer",
+      "description": "Innovation focused coffee alongside a lush park.",
+      "image": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&h=400&fit=crop",
+      "rating": 4.0,
+      "location": "HSR",
+      "address": "Agara Lake Road, HSR Layout",
+      "phone": "+91 80 4567 8901",
+      "hours": "8:00 AM - 10:00 PM",
+      "price_range": "₹₹",
+      "tags": [
+        "scenic",
+        "pets",
+        "outdoor"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Blue Tokai Coffee Roasters",
+      "description": "Single-origin beans roasted to perfection.",
+      "image": "https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600&h=400&fit=crop",
+      "rating": 4.7,
+      "location": "Indiranagar",
+      "address": "12th Main Road, Indiranagar",
+      "phone": "+91 80 5678 9012",
+      "hours": "9:00 AM - 9:00 PM",
+      "price_range": "₹₹₹",
+      "tags": [
+        "wifi",
+        "quiet",
+        "ambience"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Dyu Art Cafe",
+      "description": "Art gallery meets specialty coffee.",
+      "image": "https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=600&h=400&fit=crop",
+      "rating": 4.3,
+      "location": "Koramangala",
+      "address": "5th Block, Koramangala",
+      "phone": "+91 80 6789 0123",
+      "hours": "10:00 AM - 10:00 PM",
+      "price_range": "₹₹",
+      "tags": [
+        "ambience",
+        "wifi",
+        "open-seating"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Hole in the Wall Cafe",
+      "description": "Cozy corner with exceptional breakfast menu.",
+      "image": "https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=600&h=400&fit=crop",
+      "rating": 4.6,
+      "location": "Koramangala",
+      "address": "6th Block, Koramangala",
+      "phone": "+91 80 7890 1234",
+      "hours": "8:00 AM - 11:00 PM",
+      "price_range": "₹₹",
+      "tags": [
+        "vegan",
+        "quiet",
+        "parking"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "The Humming Tree",
+      "description": "Live music venue with great coffee.",
+      "image": "https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=600&h=400&fit=crop",
+      "rating": 4.4,
+      "location": "Indiranagar",
+      "address": "Double Road, Indiranagar",
+      "phone": "+91 80 8901 2345",
+      "hours": "11:00 AM - 1:00 AM",
+      "price_range": "₹₹₹",
+      "tags": [
+        "outdoor",
+        "ambience",
+        "pets"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Matteo Coffea",
+      "description": "European style cafe with garden seating.",
+      "image": "https://images.unsplash.com/photo-1559496417-e7f25c6961f9?w=600&h=400&fit=crop",
+      "rating": 4.5,
+      "location": "Whitefield",
+      "address": "ITPL Main Road, Whitefield",
+      "phone": "+91 80 9012 3456",
+      "hours": "8:00 AM - 10:00 PM",
+      "price_range": "₹₹",
+      "tags": [
+        "scenic",
+        "outdoor",
+        "parking"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Cafe Thulp",
+      "description": "Quirky interiors and instagram-worthy treats.",
+      "image": "https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=600&h=400&fit=crop",
+      "rating": 4.1,
+      "location": "Whitefield",
+      "address": "Brookefield, Whitefield",
+      "phone": "+91 80 0123 4567",
+      "hours": "9:00 AM - 10:30 PM",
+      "price_range": "₹₹",
+      "tags": [
+        "ambience",
+        "wifi",
+        "vegan"
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Lazy Suzy",
+      "description": "Mediterranean menu in a garden setting.",
+      "image": "https://images.unsplash.com/photo-1517487881594-2787fef5ebf7?w=600&h=400&fit=crop",
+      "rating": 4.6,
+      "location": "Jayanagar",
+      "address": "4th Block, Jayanagar",
+      "phone": "+91 80 1234 5679",
+      "hours": "11:00 AM - 11:00 PM",
+      "price_range": "₹₹₹",
+      "tags": [
+        "outdoor",
+        "scenic",
+        "pets"
+      ]
+    },
+    {
+      "id": 12,
+      "name": "The Filter Coffee",
+      "description": "Traditional South Indian filter kaapi perfected.",
+      "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&h=400&fit=crop",
+      "rating": 4.8,
+      "location": "Jayanagar",
+      "address": "9th Block, Jayanagar",
+      "phone": "+91 80 2345 6780",
+      "hours": "6:30 AM - 10:00 PM",
+      "price_range": "₹",
+      "tags": [
+        "quiet",
+        "ambience",
+        "parking"
+      ]
+    },
+    {
+  "id": 13,
+  "name": "Muziris",
+  "description": "Cafe with open air seating",
+  "image": "na",
+  "rating": 5,
+  "location": "Indiranagar",
+  "address": "CMH",
+  "phone": "+91 80 0000 0000",
+  "hours": "9:00 AM - 9:00 PM",
+  "price_range": "₹₹",
+  "tags": [
+    "ambience",
+    "open-seating"
+  ]
+}
+  ]
+}
