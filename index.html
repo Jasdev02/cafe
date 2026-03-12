@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CafesOfBLR - Cafe Directory</title>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FC6JZGMRE3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-FC6JZGMRE3');
+</script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Georgia, 'Times New Roman', serif; background-color: #f9f7f4; background-image: linear-gradient(to bottom, #f9f7f4 0%, #ede8df 100%); }
+
+/* Header */
+.header { background: linear-gradient(135deg, #6F4E37 0%, #8B6F47 100%); color: #fff9f0; padding: 18px 36px; box-shadow: 0 4px 12px rgba(111,78,55,0.2); }
+.header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 13.5px; }
+.site-title { font-size: 23.4px; font-weight: 700; letter-spacing: 0.5px; color: #fff9f0; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+.suggest-btn { background: rgba(212,175,55,0.9); color: #3d2817; border: none; padding: 8.1px 16.2px; border-radius: 18px; font-size: 12.6px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; font-family: Georgia,'Times New Roman',serif; }
+.suggest-btn:hover { background: #D4AF37; transform: translateY(-1.8px); box-shadow: 0 3px 8px rgba(212,175,55,0.4); }
+
+/* Location Tabs */
+.location-tabs { display: flex; gap: 13.5px; margin-top: 0; }
+.location-tab { background: rgba(255,249,240,0.15); border: 1px solid rgba(255,249,240,0.3); color: #fff9f0; padding: 7.2px 18px; border-radius: 18px; cursor: pointer; font-size: 12.6px; transition: all 0.3s ease; font-weight: 500; }
+.location-tab:hover { background: rgba(255,249,240,0.25); border-color: rgba(255,249,240,0.5); }
+.location-tab.active { background: #fff9f0; color: #6F4E37; font-weight: 600; border-color: #fff9f0; }
+
+/* Mobile Filter Button */
+.mobile-filter-btn { display: none; margin: 16px auto 0; background: rgba(255,249,240,0.2); color: #fff9f0; border: 1.5px solid rgba(255,249,240,0.4); padding: 9px 24px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; font-family: Georgia,'Times New Roman',serif; width: fit-content; }
+.mobile-filter-btn:hover { background: rgba(255,249,240,0.3); border-color: rgba(255,249,240,0.6); }
+
+/* Mobile Suggest Button */
+.mobile-suggest-btn { display: none; position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, #D4AF37 0%, #C19A2E 100%); color: #3d2817; border: none; padding: 14px 24px; border-radius: 30px; font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 16px rgba(212,175,55,0.4); z-index: 100; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; font-family: Georgia,'Times New Roman',serif; }
+.mobile-suggest-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212,175,55,0.5); }
+
+/* Modal Overlay */
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Modal */
+.modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff9f0; border-radius: 14.4px; padding: 27px; width: 90%; max-width: 540px; max-height: 85vh; overflow-y: auto; z-index: 1001; box-shadow: 0 9px 36px rgba(111,78,55,0.3); animation: slideUp 0.3s ease; }
+@keyframes slideUp { from { opacity: 0; transform: translate(-50%,-40%); } to { opacity: 1; transform: translate(-50%,-50%); } }
+
+/* Cafe Detail Modal — wider */
+.modal.detail-modal { max-width: 620px; padding: 0; overflow: hidden; }
+.detail-modal-img { width: 100%; height: 220px; object-fit: cover; display: block; background: linear-gradient(135deg,#e8dfc8,#d4c4a8); }
+.detail-modal-body { padding: 24px 27px; }
+.detail-modal-name { font-size: 22px; font-weight: 700; color: #3d2817; margin-bottom: 4px; }
+.detail-modal-loc { font-size: 13px; color: #8B6F47; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.detail-modal-loc span { background: #f0e8e0; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; color: #6F4E37; }
+.detail-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; margin-bottom: 16px; }
+.detail-meta-item { display: flex; flex-direction: column; gap: 2px; }
+.detail-meta-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #8B6F47; }
+.detail-meta-value { font-size: 13.5px; color: #3d2817; font-weight: 500; }
+.detail-desc { font-size: 13px; color: #5a4a3a; line-height: 1.6; margin-bottom: 16px; }
+.detail-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 20px; }
+.detail-tag { background: rgba(111,78,55,0.1); padding: 5px 12px; border-radius: 14px; font-size: 11px; font-weight: 600; color: #6F4E37; text-transform: uppercase; letter-spacing: 0.4px; }
+.detail-insta { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #6F4E37; text-decoration: none; font-weight: 600; margin-bottom: 4px; }
+.detail-insta:hover { text-decoration: underline; }
+.detail-close-btn { position: absolute; top: 14px; right: 16px; background: rgba(0,0,0,0.35); color: #fff; border: none; font-size: 18px; cursor: pointer; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; line-height: 1; z-index: 10; transition: background 0.2s; }
+.detail-close-btn:hover { background: rgba(0,0,0,0.55); }
+
+/* Mobile Filter Modal */
+.mobile-filter-modal { position: fixed; bottom: 0; left: 0; right: 0; background: #fff9f0; border-radius: 20px 20px 0 0; padding: 24px; max-height: 80vh; overflow-y: auto; z-index: 1001; box-shadow: 0 -4px 20px rgba(111,78,55,0.3); animation: slideUpBottom 0.3s ease; }
+@keyframes slideUpBottom { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 13.5px; border-bottom: 2px solid #e8dfc8; }
+.modal-title { font-size: 19.8px; font-weight: 700; color: #6F4E37; }
+.close-btn { background: none; border: none; font-size: 27px; color: #8B6F47; cursor: pointer; line-height: 1; transition: color 0.3s ease; }
+.close-btn:hover { color: #6F4E37; }
+.modal-description { font-size: 12.6px; color: #5a4a3a; margin-bottom: 18px; line-height: 1.5; }
+.form-group { margin-bottom: 16.2px; }
+.form-label { display: block; font-size: 12.6px; font-weight: 600; color: #6F4E37; margin-bottom: 5.4px; }
+.form-input, .form-textarea { width: 100%; padding: 9px 10.8px; border: 1.8px solid #e8dfc8; border-radius: 7.2px; font-size: 12.6px; font-family: Georgia,'Times New Roman',serif; color: #5a4a3a; transition: border-color 0.3s ease; }
+.form-input:focus, .form-textarea:focus { outline: none; border-color: #8B6F47; }
+.form-textarea { resize: vertical; min-height: 72px; }
+.checkbox-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px; }
+.checkbox-label { display: flex; align-items: center; font-size: 12.6px; color: #5a4a3a; cursor: pointer; }
+.checkbox-label input { width: 16.2px; height: 16.2px; margin-right: 7.2px; cursor: pointer; accent-color: #6F4E37; }
+.form-buttons { display: flex; gap: 10.8px; margin-top: 22.5px; }
+.submit-btn, .show-results-btn { flex: 1; background: linear-gradient(135deg,#6F4E37 0%,#5a3d2a 100%); color: #fff9f0; border: none; padding: 11.7px; border-radius: 7.2px; font-size: 13.5px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; font-family: Georgia,'Times New Roman',serif; }
+.submit-btn:hover, .show-results-btn:hover { transform: translateY(-1.8px); box-shadow: 0 4px 12px rgba(111,78,55,0.3); }
+.cancel-btn { flex: 1; background: #e8dfc8; color: #6F4E37; border: none; padding: 11.7px; border-radius: 7.2px; font-size: 13.5px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; font-family: Georgia,'Times New Roman',serif; }
+.cancel-btn:hover { background: #d4c4a8; }
+
+/* Loading */
+.loading { text-align: center; padding: 54px; color: #8B6F47; }
+
+/* Main Container */
+.container { display: flex; max-width: 1400px; margin: 0 auto; padding: 27px 36px; gap: 27px; }
+
+/* Sidebar */
+.sidebar { width: 252px; background: linear-gradient(to bottom,#ffffff 0%,#faf8f5 100%); padding: 22.5px; border-radius: 10.8px; box-shadow: 0 2px 12px rgba(111,78,55,0.1); border: 1px solid rgba(139,111,71,0.15); height: fit-content; position: sticky; top: 27px; }
+.filter-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22.5px; padding-bottom: 13.5px; border-bottom: 2px solid rgba(139,111,71,0.2); }
+.filter-title { font-size: 16.2px; font-weight: 700; display: flex; align-items: center; gap: 7.2px; color: #6F4E37; }
+.clear-btn { color: #8B6F47; background: none; border: none; cursor: pointer; font-size: 12.6px; font-weight: 600; transition: color 0.3s ease; }
+.clear-btn:hover { color: #6F4E37; text-decoration: underline; }
+.filter-category { margin-bottom: 22.5px; }
+.category-title { font-size: 11.7px; font-weight: 700; color: #8B6F47; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10.8px; padding-bottom: 7.2px; border-bottom: 2px solid #e8dfc8; }
+.filter-option { display: flex; align-items: center; padding: 9px 0; cursor: pointer; transition: padding-left 0.2s ease; }
+.filter-option:hover { padding-left: 4.5px; }
+.filter-option input[type="checkbox"] { width: 18px; height: 18px; margin-right: 10.8px; cursor: pointer; accent-color: #6F4E37; }
+.filter-option label { cursor: pointer; font-size: 13.5px; color: #5a4a3a; }
+
+/* Cafe Grid */
+.cafe-grid { flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(252px,1fr)); gap: 22.5px; align-content: start; }
+
+/* Cafe Card */
+.cafe-card { background: #ffffff; border-radius: 14.4px; overflow: hidden; box-shadow: 0 3px 15px rgba(111,78,55,0.12); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer; border: 1px solid rgba(139,111,71,0.1); display: flex; flex-direction: column; }
+.cafe-card:hover { transform: translateY(-4.5px); box-shadow: 0 8px 25px rgba(111,78,55,0.25); }
+.cafe-image { width: 100%; height: 180px; object-fit: cover; background: linear-gradient(135deg,#e8dfc8 0%,#d4c4a8 100%); }
+.cafe-content { padding: 18px; background: linear-gradient(to bottom,#6F4E37 0%,#5a3d2a 100%); color: #fff9f0; display: flex; flex-direction: column; flex: 1; }
+.cafe-name { font-size: 17.1px; font-weight: 700; margin-bottom: 7.2px; color: #fff9f0; letter-spacing: 0.3px; }
+.cafe-description { font-size: 12.6px; color: rgba(255,249,240,0.85); margin-bottom: 13.5px; line-height: 1.5; }
+.cafe-view-hint { font-size: 12.6px; font-weight: 700; color: #D4AF37; letter-spacing: 0.4px; }
+.cafe-card-footer { display:flex; align-items:center; justify-content:space-between; margin-top:auto; padding-top:8px; }
+
+.no-results { grid-column: 1 / -1; text-align: center; padding: 54px 18px; color: #8B6F47; font-size: 16.2px; }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .container { flex-direction: column; }
+  .sidebar { width: 100%; position: static; }
+  .cafe-grid { grid-template-columns: repeat(auto-fill, minmax(225px,1fr)); }
+  .header-top { flex-direction: column; gap: 9px; align-items: flex-start; }
+}
+@media (max-width: 768px) {
+  .header { padding: 13.5px 18px; }
+  .container { padding: 18px; }
+  .location-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .cafe-grid { grid-template-columns: 1fr; }
+  .modal { width: 95%; padding: 18px; }
+  .sidebar { display: none; }
+  .suggest-btn { display: none; }
+  .mobile-filter-btn { display: block; }
+  .mobile-suggest-btn { display: block; }
+  .detail-meta { grid-template-columns: 1fr; }
+}
+
+/* Maps icon btn */
+.maps-icon-btn { display:inline-flex; align-items:center; justify-content:center; margin-left:6px; color:#D4AF37; opacity:0.85; vertical-align:middle; text-decoration:none; transition:opacity .2s,transform .2s; }
+.maps-icon-btn:hover { opacity:1; transform:scale(1.15); }
+
+.maps-btn { display:inline-flex; align-items:center; gap:4px; margin-left:8px; padding:2px 9px 2px 7px; background:rgba(212,175,55,0.15); border:1.5px solid #D4AF37; border-radius:20px; color:#D4AF37; font-size:11px; font-weight:700; text-decoration:none; vertical-align:middle; transition:background .2s,transform .2s; letter-spacing:0.3px; }
+.maps-btn:hover { background:rgba(212,175,55,0.28); transform:scale(1.04); }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-top">
+    <div class="site-title">CafesOfBLR</div>
+    <button class="suggest-btn" onclick="openSuggestionModal()">Suggest a Cafe</button>
+  </div>
+  <div class="location-tabs" id="locationTabs"><!-- dynamic --></div>
+  <button class="mobile-filter-btn" id="mobileFilterBtn" onclick="openFilterModal()">Filters</button>
+</div>
+
+<button class="mobile-suggest-btn" id="mobileSuggestBtn" onclick="openSuggestionModal()">Suggest</button>
+
+<!-- ── SUGGESTION MODAL ── -->
+<div class="modal-overlay" id="suggestionModalOverlay" onclick="closeSuggestionModal()"></div>
+<div class="modal" id="suggestionModal" style="display:none;">
+  <div class="modal-header">
+    <h2 class="modal-title">Suggest a Cafe</h2>
+    <button class="close-btn" onclick="closeSuggestionModal()">&times;</button>
+  </div>
+  <p class="modal-description">Know a great cafe we should add? Share the details below and we'll review it for inclusion in our directory.</p>
+  <form id="suggestionForm" onsubmit="submitSuggestion(event)">
+    <div class="form-group">
+      <label class="form-label">Cafe Name</label>
+      <input type="text" class="form-input" id="s-cafeName" required>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Location</label>
+      <!-- FIX 5: populated dynamically from cafeData.locations -->
+      <select class="form-input" id="s-cafeLocation" required>
+        <option value="">Select location</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Address</label>
+      <input type="text" class="form-input" id="s-cafeAddress">
+    </div>
+    <div class="form-group">
+      <label class="form-label">What makes this cafe special?</label>
+      <textarea class="form-textarea" id="s-cafeDescription" placeholder="Great coffee, cozy ambience, fast wifi, etc."></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Attributes (select all that apply)</label>
+      <!-- FIX 4: populated dynamically from cafeData.filter_categories -->
+      <div class="checkbox-grid" id="s-attrGrid"><div class="loading" style="padding:10px;font-size:12px;">Loading...</div></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Your Email (optional)</label>
+      <input type="email" class="form-input" id="s-userEmail" placeholder="So we can thank you!">
+    </div>
+    <div class="form-buttons">
+      <button type="button" class="cancel-btn" onclick="closeSuggestionModal()">Cancel</button>
+      <button type="submit" class="submit-btn">Submit Suggestion</button>
+    </div>
+  </form>
+</div>
+
+<!-- ── MOBILE FILTER MODAL ── -->
+<div class="modal-overlay" id="filterModalOverlay" onclick="closeFilterModal()"></div>
+<div class="mobile-filter-modal" id="filterModal" style="display:none;">
+  <div class="modal-header">
+    <h2 class="modal-title">Filter by Attributes</h2>
+    <button class="close-btn" onclick="closeFilterModal()">&times;</button>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+    <span style="font-size:13.5px;color:#8B6F47;">Select attributes to filter cafes</span>
+    <button class="clear-btn" id="mobileClearFilters" style="font-size:13.5px;">Clear all</button>
+  </div>
+  <div id="mobileFilterContainer"><div class="loading" style="padding:18px;font-size:12.6px;">Loading filters...</div></div>
+  <div class="form-buttons" style="margin-top:20px;">
+    <button type="button" class="show-results-btn" onclick="closeFilterModal()">Show Results</button>
+  </div>
+</div>
+
+<!-- ── CAFE DETAIL MODAL ── -->
+<div class="modal-overlay" id="detailModalOverlay" onclick="closeDetailModal()"></div>
+<div class="modal detail-modal" id="detailModal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);">
+  <button class="detail-close-btn" onclick="closeDetailModal()">&#10005;</button>
+  <img id="dm-img" class="detail-modal-img" src="" alt="">
+  <div class="detail-modal-body">
+    <div class="detail-modal-name" id="dm-name"></div>
+    <div class="detail-modal-loc" id="dm-loc"></div>
+    <div class="detail-meta" id="dm-meta"></div>
+    <div class="detail-desc" id="dm-desc"></div>
+    <div class="detail-tags" id="dm-tags"></div>
+    <div id="dm-insta"></div>
+  </div>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="container">
+  <aside class="sidebar">
+    <div class="filter-header">
+      <div class="filter-title"><span>&#9670;</span> Filters</div>
+      <button class="clear-btn" id="clearFilters">Clear all</button>
+    </div>
+    <div id="filterContainer"><div class="loading" style="padding:18px;font-size:12.6px;">Loading filters...</div></div>
+  </aside>
+  <main class="cafe-grid" id="cafeGrid">
+    <div class="loading">Loading cafes...</div>
+  </main>
+</div>
+
+<script>
+// ── STATE ──
+let cafeData      = null;
+let currentLocation = '';
+let selectedFilters = [];
+let lastLoadTime  = null;
+
+// ── SUGGESTION MODAL ──
+function openSuggestionModal() {
+  document.getElementById('suggestionModalOverlay').style.display = 'block';
+  document.getElementById('suggestionModal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  populateSuggestionModal();
+}
+function closeSuggestionModal() {
+  document.getElementById('suggestionModalOverlay').style.display = 'none';
+  document.getElementById('suggestionModal').style.display = 'none';
+  document.body.style.overflow = 'auto';
+  document.getElementById('suggestionForm').reset();
+}
+
+// FIX 4 + 5: Populate suggestion modal dynamically
+function populateSuggestionModal() {
+  if (!cafeData) return;
+
+  // Locations dropdown
+  const locSel = document.getElementById('s-cafeLocation');
+  locSel.innerHTML = '<option value="">Select location</option>';
+  cafeData.locations.forEach(function(loc) {
+    const o = document.createElement('option'); o.value = o.textContent = loc; locSel.appendChild(o);
+  });
+
+  // Attribute checkboxes — flat list from all categories
+  const grid = document.getElementById('s-attrGrid');
+  grid.innerHTML = '';
+  const cats = cafeData.filter_categories || [];
+  cats.forEach(function(cat) {
+    cat.filters.forEach(function(f) {
+      const lbl = document.createElement('label'); lbl.className = 'checkbox-label';
+      const cb  = document.createElement('input'); cb.type = 'checkbox'; cb.value = f.id; cb.className = 's-attr-cb';
+      lbl.appendChild(cb); lbl.appendChild(document.createTextNode(' ' + f.label));
+      grid.appendChild(lbl);
+    });
+  });
+}
+
+function submitSuggestion(event) {
+  event.preventDefault();
+  const cafeName   = document.getElementById('s-cafeName').value;
+  const location   = document.getElementById('s-cafeLocation').value;
+  const address    = document.getElementById('s-cafeAddress').value;
+  const description= document.getElementById('s-cafeDescription').value;
+  const email      = document.getElementById('s-userEmail').value;
+  const attrs = [];
+  document.querySelectorAll('.s-attr-cb:checked').forEach(cb => attrs.push(cb.value));
+  const subject = encodeURIComponent('New Cafe Suggestion: ' + cafeName);
+  const body    = encodeURIComponent(
+    'Cafe Name: ' + cafeName + '\nLocation: ' + location + '\nAddress: ' + address +
+    '\nDescription: ' + description + '\nAttributes: ' + attrs.join(', ') +
+    '\nSuggested by: ' + (email || 'Anonymous') + '\nDate: ' + new Date().toLocaleString()
+  );
+  window.location.href = 'mailto:your-email@example.com?subject=' + subject + '&body=' + body;
+  alert('Thank you for your suggestion! Your email client will open to send us the details.');
+  closeSuggestionModal();
+}
+
+// ── FILTER MODAL (mobile) ──
+function openFilterModal() {
+  document.getElementById('filterModalOverlay').style.display = 'block';
+  document.getElementById('filterModal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+function closeFilterModal() {
+  document.getElementById('filterModalOverlay').style.display = 'none';
+  document.getElementById('filterModal').style.display = 'none';
+  document.body.style.overflow = 'auto';
+}
+
+// ── DETAIL MODAL (FIX 1, 2, 3) ──
+function viewDetails(cafeId) {
+  const cafe = cafeData.cafes.find(c => c.id === cafeId);
+  if (!cafe) return;
+
+  // Image
+  const img = document.getElementById('dm-img');
+  if (cafe.image) { img.src = cafe.image; img.style.display = 'block'; }
+  else { img.style.display = 'none'; }
+
+  // Name & location row
+  document.getElementById('dm-name').textContent = cafe.name;
+  const locEl = document.getElementById('dm-loc');
+  locEl.innerHTML = '&#128205; ' + (cafe.location || '');
+
+
+  // Meta grid
+  const meta = [];
+  if (cafe.hours)   meta.push(['Hours',   cafe.hours]);
+  if (cafe.phone)   meta.push(['Phone',   cafe.phone]);
+  if (cafe.address) meta.push(['Address', cafe.address]);
+  document.getElementById('dm-meta').innerHTML = meta.map(function(m) {
+    return '<div class="detail-meta-item"><div class="detail-meta-label">' + m[0] + '</div><div class="detail-meta-value">' + m[1] + '</div></div>';
+  }).join('');
+
+  // Description
+  document.getElementById('dm-desc').textContent = cafe.description || '';
+
+  // Tags
+  const tagMap = {};
+  (cafeData.attributes || []).forEach(a => tagMap[a.id] = a.label);
+  document.getElementById('dm-tags').innerHTML = (cafe.tags || []).map(function(t) {
+    return '<span class="detail-tag">' + (tagMap[t] || t) + '</span>';
+  }).join('');
+
+  // FIX 2: Instagram
+  const instaEl = document.getElementById('dm-insta');
+  if (cafe.instagram) {
+    const handle = cafe.instagram.startsWith('@') ? cafe.instagram : '@' + cafe.instagram;
+    instaEl.innerHTML = '<a class="detail-insta" href="https://instagram.com/' + handle.replace('@','') + '" target="_blank">&#128247; ' + handle + '</a>';
+  } else {
+    instaEl.innerHTML = '';
+  }
+
+  document.getElementById('detailModalOverlay').style.display = 'block';
+  document.getElementById('detailModal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDetailModal() {
+  document.getElementById('detailModalOverlay').style.display = 'none';
+  document.getElementById('detailModal').style.display = 'none';
+  document.body.style.overflow = 'auto';
+}
+
+// ── LOAD DATA ──
+async function loadCafeData(forceRefresh = false) {
+  try {
+    const timestamp = new Date().getTime();
+    const url = forceRefresh ? `cafes_database.json?t=${timestamp}` : 'cafes_database.json';
+    const response = await fetch(url, {
+      cache: forceRefresh ? 'no-cache' : 'default',
+      headers: forceRefresh ? { 'Cache-Control': 'no-cache' } : {}
+    });
+    if (!response.ok) throw new Error('Failed to load cafe data');
+    cafeData = await response.json();
+    lastLoadTime = new Date();
+    if (!currentLocation) {
+      // Set to first location that actually has cafes
+      currentLocation = cafeData.locations.find(function(loc) {
+        return cafeData.cafes.some(function(c) { return c.location === loc; });
+      }) || cafeData.locations[0];
+    }
+    renderLocationTabs();
+    renderFilters();
+    renderMobileFilters();
+    renderCafes();
+    attachEventListeners();
+  } catch (error) {
+    throw error;
+  }
+}
+
+// ── LOCATION TABS ──
+function renderLocationTabs() {
+  const tabsContainer = document.getElementById('locationTabs');
+  tabsContainer.innerHTML = '';
+  // Only show locations that have at least one cafe
+  const activeLocs = cafeData.locations.filter(function(loc) {
+    return cafeData.cafes.some(function(c) { return c.location === loc; });
+  });
+  // Fallback: if currentLocation has no cafes, reset to first active one
+  if (activeLocs.length && !activeLocs.includes(currentLocation)) {
+    currentLocation = activeLocs[0];
+  }
+  activeLocs.forEach(function(location) {
+    const tab = document.createElement('button');
+    tab.className = 'location-tab' + (location === currentLocation ? ' active' : '');
+    tab.dataset.location = location;
+    tab.textContent = location;
+    tabsContainer.appendChild(tab);
+  });
+}
+
+// ── FILTERS (desktop sidebar) ──
+function renderFilters() {
+  const container = document.getElementById('filterContainer');
+  container.innerHTML = '';
+  const cats = cafeData.filter_categories || [];
+  if (cats.length) {
+    cats.forEach(function(cat) {
+      const catDiv = document.createElement('div'); catDiv.className = 'filter-category';
+      const title  = document.createElement('div'); title.className = 'category-title'; title.textContent = cat.name;
+      catDiv.appendChild(title);
+      const grp = document.createElement('div'); grp.className = 'filter-group';
+      cat.filters.forEach(function(f) {
+        const opt = document.createElement('div'); opt.className = 'filter-option';
+        const cb  = document.createElement('input'); cb.type = 'checkbox'; cb.id = f.id; cb.value = f.id;
+        cb.checked = selectedFilters.includes(f.id); cb.classList.add('desktop-filter');
+        const lbl = document.createElement('label'); lbl.htmlFor = f.id; lbl.textContent = f.label; lbl.title = f.description;
+        opt.appendChild(cb); opt.appendChild(lbl); grp.appendChild(opt);
+      });
+      catDiv.appendChild(grp); container.appendChild(catDiv);
+    });
+  }
+}
+
+// ── FILTERS (mobile modal) ──
+function renderMobileFilters() {
+  const container = document.getElementById('mobileFilterContainer');
+  container.innerHTML = '';
+  const cats = cafeData.filter_categories || [];
+  if (cats.length) {
+    cats.forEach(function(cat) {
+      const catDiv = document.createElement('div'); catDiv.className = 'filter-category';
+      const title  = document.createElement('div'); title.className = 'category-title'; title.textContent = cat.name;
+      catDiv.appendChild(title);
+      const grp = document.createElement('div'); grp.className = 'filter-group';
+      cat.filters.forEach(function(f) {
+        const opt = document.createElement('div'); opt.className = 'filter-option';
+        const cb  = document.createElement('input'); cb.type = 'checkbox';
+        cb.id = 'mobile-' + f.id; cb.value = f.id;
+        cb.checked = selectedFilters.includes(f.id); cb.classList.add('mobile-filter');
+        const lbl = document.createElement('label'); lbl.htmlFor = 'mobile-' + f.id; lbl.textContent = f.label;
+        opt.appendChild(cb); opt.appendChild(lbl); grp.appendChild(opt);
+      });
+      catDiv.appendChild(grp); container.appendChild(catDiv);
+    });
+  }
+}
+
+// ── CAFE GRID ──
+function renderCafes() {
+  const grid = document.getElementById('cafeGrid');
+  let filtered = cafeData.cafes.filter(c => c.location === currentLocation);
+  if (selectedFilters.length > 0) {
+    filtered = filtered.filter(c => selectedFilters.every(f => c.tags && c.tags.includes(f)));
+  }
+  grid.innerHTML = '';
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="no-results">No cafes found matching your criteria. Try adjusting your filters.</div>';
+    return;
+  }
+  filtered.forEach(c => grid.appendChild(createCafeCard(c)));
+}
+
+function createCafeCard(cafe) {
+  const card = document.createElement('div'); card.className = 'cafe-card';
+  card.innerHTML = `
+    <img src="${cafe.image || ''}" alt="${cafe.name}" class="cafe-image">
+    <div class="cafe-content">
+      <div class="cafe-name">${cafe.name}</div>
+      <div class="cafe-description">${cafe.description || ''}</div>
+      <div class="cafe-card-footer">
+        ${cafe.maps_url ? '<a class=\"maps-btn\" href=\"' + cafe.maps_url + '\" target=\"_blank\" rel=\"noopener\" onclick=\"event.stopPropagation()\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"12\" height=\"12\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z\"/><circle cx=\"12\" cy=\"10\" r=\"3\"/></svg> Maps</a>' : ''}
+        <div class="cafe-view-hint">View Details &rsaquo;</div>
+      </div>
+    </div>`;
+  card.addEventListener('click', () => viewDetails(cafe.id));
+  return card;
+}
+
+// ── EVENT LISTENERS ──
+function attachEventListeners() {
+  // Location tabs
+  document.querySelectorAll('.location-tab').forEach(tab => {
+    tab.addEventListener('click', e => {
+      document.querySelectorAll('.location-tab').forEach(t => t.classList.remove('active'));
+      e.target.classList.add('active');
+      currentLocation = e.target.dataset.location;
+      renderCafes();
+    });
+  });
+  // Desktop filters
+  document.querySelectorAll('.desktop-filter').forEach(cb => {
+    cb.addEventListener('change', e => {
+      if (e.target.checked) selectedFilters.push(e.target.value);
+      else selectedFilters = selectedFilters.filter(f => f !== e.target.value);
+      syncMobileFilters(); renderCafes();
+    });
+  });
+  // Mobile filters
+  document.querySelectorAll('.mobile-filter').forEach(cb => {
+    cb.addEventListener('change', e => {
+      if (e.target.checked) selectedFilters.push(e.target.value);
+      else selectedFilters = selectedFilters.filter(f => f !== e.target.value);
+      syncDesktopFilters(); renderCafes();
+    });
+  });
+  // Clear buttons
+  document.getElementById('clearFilters').addEventListener('click', () => {
+    selectedFilters = [];
+    document.querySelectorAll('.desktop-filter').forEach(cb => cb.checked = false);
+    syncMobileFilters(); renderCafes();
+  });
+  document.getElementById('mobileClearFilters').addEventListener('click', () => {
+    selectedFilters = [];
+    document.querySelectorAll('.mobile-filter').forEach(cb => cb.checked = false);
+    syncDesktopFilters(); renderCafes();
+  });
+}
+
+function syncDesktopFilters() {
+  document.querySelectorAll('.desktop-filter').forEach(cb => cb.checked = selectedFilters.includes(cb.value));
+}
+function syncMobileFilters() {
+  document.querySelectorAll('.mobile-filter').forEach(cb => cb.checked = selectedFilters.includes(cb.value));
+}
+
+// Auto-refresh every 5 min
+setInterval(() => loadCafeData(true), 5 * 60 * 1000);
+
+// Refresh on tab focus if stale
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && lastLoadTime) {
+    const stale = new Date() - lastLoadTime > 5 * 60 * 1000;
+    if (stale) loadCafeData(true);
+  }
+});
+
+// ── INIT ──
+async function init() {
+  try {
+    await loadCafeData();
+  } catch (error) {
+    console.error('Error loading cafe data', error);
+    document.getElementById('cafeGrid').innerHTML =
+      '<div class="no-results">Error loading cafe data. Make sure <code>cafes_database.json</code> is in the same folder.</div>';
+  }
+}
+init();
+</script>
+</body>
+</html>

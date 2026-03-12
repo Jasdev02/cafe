@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CafesOfBLR — Admin</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f0ece4;min-height:100vh;display:flex}
+
+/* ── SIDEBAR ── */
+#sidebar{width:220px;min-height:100vh;background:linear-gradient(160deg,#6F4E37,#3d2410);color:#fff9f0;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100}
+.logo{padding:24px 20px 18px;font-size:17px;font-weight:700;border-bottom:1px solid rgba(255,249,240,.12);display:flex;align-items:center;gap:9px}
+.nav a{display:flex;align-items:center;gap:10px;padding:12px 20px;text-decoration:none;color:rgba(255,249,240,.65);font-size:13.5px;font-weight:500;border-left:3px solid transparent;transition:.18s;user-select:none}
+.nav a:hover{background:rgba(255,249,240,.07);color:#fff9f0}
+.nav a.on{background:rgba(255,249,240,.11);color:#fff9f0;border-left-color:#D4AF37}
+.nav .ico{font-size:15px;width:20px;text-align:center}
+#draftBadge{margin-left:auto;background:#D4AF37;color:#3d2817;font-size:10px;padding:1px 7px;border-radius:10px;font-weight:700;display:none}
+.sfooter{margin-top:auto;padding:16px 20px;font-size:11px;color:rgba(255,249,240,.3);border-top:1px solid rgba(255,249,240,.08)}
+
+/* ── MAIN ── */
+#main{margin-left:220px;flex:1}
+.topbar{background:#fff;border-bottom:1px solid #e5e0d8;padding:14px 32px;position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between}
+.topbar h1{font-size:18px;font-weight:700;color:#3d2817}
+.topbar p{font-size:12px;color:#9b8878;margin-top:1px}
+.pg{display:none;padding:30px 32px}
+.pg.on{display:block}
+
+/* ── CARDS ── */
+.card{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 10px rgba(111,78,55,.07);margin-bottom:20px}
+.card-title{font-size:14px;font-weight:700;color:#6F4E37;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #f0ece4;display:flex;align-items:center;gap:8px}
+
+/* ── FORM ── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.span2{grid-column:1/-1}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:12px;font-weight:600;color:#5a4a3a;letter-spacing:.2px}
+.fg input,.fg select,.fg textarea{padding:9px 12px;border:1.5px solid #e0d8d0;border-radius:7px;font-size:13.5px;font-family:inherit;color:#3d2817;background:#fdfcfb;transition:.15s}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:#8B6F47;background:#fff}
+.fg textarea{resize:vertical;min-height:80px}
+.hint{font-size:11px;color:#a89880;margin-top:3px}
+
+/* ── PILLS ── */
+.pill-group{margin-bottom:14px}
+.pill-cat{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.1px;color:#8B6F47;margin-bottom:7px}
+.pill-row{display:flex;flex-wrap:wrap;gap:6px}
+label.pill{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border:1.5px solid #e0d8d0;border-radius:16px;cursor:pointer;font-size:12.5px;font-weight:500;color:#5a4a3a;background:#fdfcfb;user-select:none;transition:.15s}
+label.pill:hover{border-color:#8B6F47}
+label.pill.on{border-color:#6F4E37;background:#6F4E37;color:#fff}
+label.pill input{display:none}
+
+/* ── BUTTONS ── */
+.btn{padding:9px 18px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid transparent;font-family:inherit;transition:.15s;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{filter:brightness(.93)}
+.btn-br{background:#6F4E37;color:#fff;border-color:#6F4E37}
+.btn-gd{background:#D4AF37;color:#3d2817;border-color:#D4AF37}
+.btn-ol{background:#fff;color:#6F4E37;border-color:#c0a882}
+.btn-rd{background:#fff;color:#c0392b;border-color:#e0b0aa}
+.btn-sm{padding:5px 12px;font-size:12px}
+.btn-row{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;align-items:center}
+
+/* ── CAFE CARDS GRID ── */
+.cafe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.cafe-card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(111,78,55,.08);border:1.5px solid #f0e8e0;transition:.2s}
+.cafe-card:hover{box-shadow:0 4px 16px rgba(111,78,55,.13);border-color:#d4b896}
+.cafe-card-img{width:100%;height:140px;object-fit:cover;background:#f0ece4;display:block}
+.cafe-card-img-placeholder{width:100%;height:140px;background:linear-gradient(135deg,#e8ddd4,#d4c4b0);display:flex;align-items:center;justify-content:center;font-size:32px;color:#a89880}
+.cafe-card-body{padding:14px}
+.cafe-card-name{font-size:14px;font-weight:700;color:#3d2817;margin-bottom:3px}
+.cafe-card-loc{font-size:12px;color:#8B6F47;margin-bottom:8px;display:flex;align-items:center;gap:4px}
+.cafe-card-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.tag-chip{font-size:10px;padding:2px 8px;background:#f0e8e0;color:#6F4E37;border-radius:10px;font-weight:600}
+.cafe-card-actions{display:flex;gap:8px;padding:0 14px 14px}
+
+/* ── UPLOAD ZONE ── */
+.uz{border:2px dashed #cdc5bb;border-radius:10px;padding:28px 20px;text-align:center;cursor:pointer;background:#fdfcfb;position:relative;transition:.2s}
+.uz:hover,.uz.sel{border-color:#6F4E37;background:#f9f6f2}
+.uz input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.uz .ui{font-size:28px;margin-bottom:6px}
+.uz .ul{font-size:13px;color:#8B6F47}
+.uz .uh{font-size:11px;color:#b0a090;margin-top:3px}
+
+/* ── STATUS BOXES ── */
+.sb{padding:10px 14px;border-radius:7px;font-size:12.5px;font-weight:600;margin-top:12px}
+.sb-ok{background:#d1e7dd;color:#0f5132}
+.sb-wn{background:#fff3cd;color:#856404}
+.sb-er{background:#f8d7da;color:#721c24}
+
+/* ── PUBLISH STATS ── */
+.pstats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.pstat{background:#f9f6f2;border-radius:10px;padding:16px;text-align:center}
+.pstat .n{font-size:32px;font-weight:700;color:#6F4E37}
+.pstat .l{font-size:11px;color:#8B6F47;margin-top:3px}
+
+/* ── ATTR MANAGER ── */
+.cg{margin-bottom:18px}
+.ctitle{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#8B6F47;padding:5px 12px;background:#f0ece4;border-radius:5px;margin-bottom:8px}
+.ar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border:1px solid #f0ece4;border-radius:7px;margin-bottom:5px;background:#fdfcfb}
+.ar-n{font-size:13px;font-weight:600;color:#3d2817}
+.ar-m{font-size:11px;color:#9b8878;margin-top:1px}
+
+/* ── IMAGE PREVIEW ── */
+#imgPreview{width:100%;height:160px;object-fit:cover;border-radius:8px;margin-top:8px;display:none;border:1.5px solid #e0d8d0}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:40px 20px;color:#b0a090}
+.empty-i{font-size:38px;margin-bottom:10px}
+
+/* ── MODAL ── */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center}
+.modal-bg.on{display:flex}
+.modal{background:#fff;border-radius:14px;padding:28px;width:90%;max-width:680px;max-height:90vh;overflow-y:auto;box-shadow:0 16px 48px rgba(0,0,0,.2)}
+.modal-title{font-size:16px;font-weight:700;color:#3d2817;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between}
+.modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:#9b8878;padding:0 4px;line-height:1}
+.modal-close:hover{color:#3d2817}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:22px;right:22px;padding:12px 18px;border-radius:9px;font-size:13px;font-weight:500;box-shadow:0 6px 20px rgba(0,0,0,.18);transform:translateY(60px);opacity:0;transition:all .28s;z-index:999;max-width:280px;background:#3d2817;color:#fff9f0}
+#toast.on{transform:translateY(0);opacity:1}
+#toast.ok{background:#1a6b3a}
+#toast.er{background:#8b1a1a}
+
+/* ── IMAGE CROP MODAL ── */
+#cropModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;align-items:center;justify-content:center}
+#cropModal.on{display:flex}
+.crop-box{background:#1a1a1a;border-radius:14px;padding:22px;width:92%;max-width:700px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.crop-title{color:#fff9f0;font-size:15px;font-weight:700;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+.crop-title button{background:none;border:none;color:rgba(255,249,240,.5);font-size:20px;cursor:pointer;line-height:1}
+.crop-title button:hover{color:#fff9f0}
+.crop-canvas-wrap{position:relative;overflow:hidden;border-radius:8px;background:#000;cursor:crosshair;user-select:none;touch-action:none}
+#cropCanvas{display:block;max-width:100%}
+.crop-selection{position:absolute;border:2px solid #D4AF37;box-shadow:0 0 0 9999px rgba(0,0,0,.55);pointer-events:none}
+.crop-handle{position:absolute;width:10px;height:10px;background:#D4AF37;border-radius:2px}
+.crop-handle.tl{top:-5px;left:-5px;cursor:nw-resize}
+.crop-handle.tr{top:-5px;right:-5px;cursor:ne-resize}
+.crop-handle.bl{bottom:-5px;left:-5px;cursor:sw-resize}
+.crop-handle.br{bottom:-5px;right:-5px;cursor:se-resize}
+.crop-hint{color:rgba(255,249,240,.45);font-size:11px;margin-top:10px;text-align:center}
+.crop-actions{display:flex;gap:10px;margin-top:14px}
+.crop-btn{padding:9px 18px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:inherit;flex:1}
+.crop-btn-apply{background:#D4AF37;color:#3d2817}
+.crop-btn-apply:hover{background:#e5c158}
+.crop-btn-cancel{background:rgba(255,249,240,.1);color:#fff9f0}
+.crop-btn-cancel:hover{background:rgba(255,249,240,.18)}
+.crop-ratio-row{display:flex;gap:8px;margin-bottom:12px}
+.crop-ratio-btn{padding:4px 12px;border-radius:6px;border:1.5px solid rgba(255,249,240,.2);background:none;color:rgba(255,249,240,.6);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit}
+.crop-ratio-btn.on{border-color:#D4AF37;color:#D4AF37;background:rgba(212,175,55,.1)}
+
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="logo">&#9749; CafesOfBLR</div>
+  <nav class="nav">
+    <a href="#" data-pg="pg-cafes" class="on"><span class="ico">&#9749;</span> Live Cafes</a>
+    <a href="#" data-pg="pg-add"><span class="ico">&#43;</span> Add Cafe</a>
+    <a href="#" data-pg="pg-filters"><span class="ico">&#127991;</span> Filters / CSV</a>
+    <a href="#" data-pg="pg-publish"><span class="ico">&#128640;</span> Publish <span id="draftBadge"></span></a>
+  </nav>
+  <div class="sfooter">Local Admin &middot; CafesOfBLR</div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <div class="topbar">
+    <div><h1 id="ttl">Live Cafes</h1><p id="sub">View and edit all cafes</p></div>
+    <button class="btn btn-br btn-sm" id="btnGoAdd">&#43; Add New Cafe</button>
+  </div>
+
+  <!-- ══ LIVE CAFES ══ -->
+  <div id="pg-cafes" class="pg on">
+    <div id="cafeGrid" class="cafe-grid"></div>
+    <div id="cafeEmpty" class="empty" style="display:none">
+      <div class="empty-i">&#9749;</div>
+      <p>No cafes yet. Click <strong>Add New Cafe</strong> to get started.</p>
+    </div>
+  </div>
+
+  <!-- ══ ADD / EDIT CAFE ══ -->
+  <div id="pg-add" class="pg">
+    <div class="card">
+      <div class="card-title"><span>&#9998;</span> <span id="formTitle">Add New Cafe</span></div>
+      <form id="cafeForm">
+        <div class="grid2">
+          <div class="fg"><label>Cafe Name *</label><input id="f-name" placeholder="e.g. Blue Tokai Coffee" required></div>
+          <div class="fg"><label>Location *</label>
+            <select id="f-loc" required><option value="">Select location</option></select>
+          </div>
+          <div class="fg span2"><label>Address</label><input id="f-addr" placeholder="Full street address"></div>
+          <div class="fg span2"><label>Google Maps Link</label><input type="url" id="f-maps" placeholder="https://maps.app.goo.gl/..."></div>
+          <div class="fg"><label>Phone</label><input id="f-phone" placeholder="+91 98765 43210"></div>
+          <div class="fg"><label>Hours</label><input id="f-hours" placeholder="8:00 AM - 10:00 PM"></div>
+
+          <div class="fg"><label>Instagram Handle</label><input id="f-insta" placeholder="@cafename"></div>
+          <div class="fg span2">
+            <label>Cafe Image</label>
+            <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px">
+              <label style="font-size:11px;font-weight:600;color:#8B6F47;white-space:nowrap">Option 1 — Upload from device:</label>
+              <input type="file" id="f-img-file" accept="image/*" style="font-size:12px;color:#5a4a3a;flex:1">
+            </div>
+            <div style="display:flex;gap:10px;align-items:center">
+              <label style="font-size:11px;font-weight:600;color:#8B6F47;white-space:nowrap">Option 2 — Paste URL:</label>
+              <input id="f-img" placeholder="https://images.unsplash.com/..." style="flex:1">
+            </div>
+            <span class="hint">Upload takes priority over URL if both are provided</span>
+            <img id="imgPreview" src="" alt="Preview">
+          </div>
+          <div class="fg span2"><label>Description</label><textarea id="f-desc" placeholder="What makes this cafe special?"></textarea></div>
+        </div>
+
+        <!-- FILTER TAGS -->
+        <div style="margin-top:20px">
+          <div style="font-size:13px;font-weight:600;color:#5a4a3a;margin-bottom:12px">Filter Tags</div>
+          <div id="pillBox"></div>
+        </div>
+
+        <div class="btn-row">
+          <button type="submit" class="btn btn-br">&#128190; Save Cafe</button>
+          <button type="button" id="btnCancelEdit" class="btn btn-ol" style="display:none">Cancel Edit</button>
+          <button type="button" id="btnClearForm" class="btn btn-ol">Clear</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ══ FILTERS / CSV ══ -->
+  <div id="pg-filters" class="pg">
+    <div class="card">
+      <div class="card-title">&#127991; Current Filter Tags</div>
+      <div id="attrList"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">&#128228; Upload Filters CSV</div>
+      <p style="font-size:12px;color:#8B6F47;margin-bottom:14px">
+        Upload a CSV to replace all filter tags. Required headers:<br>
+        <code style="background:#f0ece4;padding:2px 6px;border-radius:4px;font-size:11px">category_name, category_id, id, label, description</code>
+      </p>
+      <div class="uz" id="attrZone">
+        <input type="file" id="attrFile" accept=".csv">
+        <div class="ui">&#128193;</div>
+        <div class="ul" id="attrLbl">Click or drag &amp; drop Filters CSV here</div>
+        <div class="uh">attributes_upload_template.csv</div>
+      </div>
+      <div id="attrSt"></div>
+      <div class="btn-row">
+        <button class="btn btn-br" id="btnAttrProc">&#9881; Process CSV</button>
+        <button class="btn btn-ol" id="btnAttrDl">&#11015; Download Current as Template</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PUBLISH ══ -->
+  <div id="pg-publish" class="pg">
+    <div class="card">
+      <div class="card-title">&#128640; Publish to Live Site</div>
+      <div class="pstats" id="pstats"></div>
+      <p style="font-size:13px;color:#5a4a3a;line-height:1.7;margin-bottom:18px">
+        This generates a fresh <code style="background:#f0ece4;padding:1px 5px;border-radius:4px">cafes_database.json</code>
+        containing all cafes and filter tags.<br>
+        Drop it into your site folder — changes go live instantly. &#127881;
+      </p>
+      <div id="previewBox" style="display:none;background:#f9f6f2;border-radius:9px;padding:16px;margin-bottom:16px;overflow:auto;max-height:280px">
+        <pre id="previewTxt" style="font-size:11px;color:#3d2817"></pre>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-gd" id="btnPub">&#128229; Generate &amp; Download cafes_database.json</button>
+        <button class="btn btn-ol" id="btnPrev">&#128065; Preview JSON</button>
+        <button class="btn btn-rd btn-sm" id="btnClearAll" style="margin-left:auto">&#128465; Delete All Cafes</button>
+      </div>
+    </div>
+  </div>
+</div><!-- /main -->
+
+<!-- EDIT MODAL -->
+<div class="modal-bg" id="editModal">
+  <div class="modal">
+    <div class="modal-title">
+      <span>&#9998; Edit Cafe</span>
+      <button class="modal-close" id="modalClose">&#10005;</button>
+    </div>
+    <!-- Modal uses same form fields, dynamically populated -->
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════
+//  STATE
+// ══════════════════════════════
+var S = { cafes: [], attrs: [], editId: null };
+var LOCS = ['HSR Layout','Indiranagar','Koramangala','Whitefield','Jayanagar','Bellandur','Sarjapur Road','JP Nagar','Marathahalli'];
+
+var PAGE_META = {
+  'pg-cafes':   ['Live Cafes',       'View and edit all cafes'],
+  'pg-add':     ['Add New Cafe',     'Fill in the details and save'],
+  'pg-filters': ['Filters / CSV',    'Manage filter tags — upload CSV to update'],
+  'pg-publish': ['Publish',          'Generate cafes_database.json and go live']
+};
+
+// ══════════════════════════════
+//  DEFAULT FILTERS
+// ══════════════════════════════
+function defaultAttrs() {
+  return [
+    {id:'ambience',         label:'Great Ambience',   description:'Well-designed interiors',      category_id:'ambience',   category_name:'Ambience'},
+    {id:'quiet',            label:'Quiet',            description:'Quiet and calm environment',   category_id:'ambience',   category_name:'Ambience'},
+    {id:'scenic',           label:'Scenic View',      description:'Scenic or nature view',        category_id:'ambience',   category_name:'Ambience'},
+    {id:'outdoor',          label:'Outdoor Seating',  description:'Outdoor seating available',    category_id:'ambience',   category_name:'Ambience'},
+    {id:'cozy',             label:'Cozy',             description:'Warm and cozy feel',           category_id:'ambience',   category_name:'Ambience'},
+    {id:'wifi',             label:'WiFi',             description:'Free WiFi available',          category_id:'amenities',  category_name:'Amenities'},
+    {id:'parking',          label:'Parking',          description:'Parking available',            category_id:'amenities',  category_name:'Amenities'},
+    {id:'pets',             label:'Pet Friendly',     description:'Pets allowed',                 category_id:'amenities',  category_name:'Amenities'},
+    {id:'power-outlets',    label:'Power Outlets',    description:'Charging points available',    category_id:'amenities',  category_name:'Amenities'},
+    {id:'ac',               label:'Air Conditioned',  description:'Air conditioned space',        category_id:'amenities',  category_name:'Amenities'},
+    {id:'specialty-coffee', label:'Specialty Coffee', description:'Third-wave specialty coffee',  category_id:'food-drink', category_name:'Food & Drink'},
+    {id:'vegan',            label:'Vegan Options',    description:'Vegan menu items',             category_id:'food-drink', category_name:'Food & Drink'},
+    {id:'food',             label:'Good Food',        description:'Quality food menu',            category_id:'food-drink', category_name:'Food & Drink'},
+    {id:'brunch',           label:'Brunch',           description:'Brunch menu available',        category_id:'food-drink', category_name:'Food & Drink'},
+    {id:'desserts',         label:'Desserts',         description:'Great desserts and pastries',  category_id:'food-drink', category_name:'Food & Drink'},
+    {id:'work-friendly',    label:'Work Friendly',    description:'Good for working or studying', category_id:'vibe',       category_name:'Vibe'},
+    {id:'romantic',         label:'Romantic',         description:'Great for dates',              category_id:'vibe',       category_name:'Vibe'},
+    {id:'instagrammable',   label:'Instagrammable',   description:'Photogenic and aesthetic',     category_id:'vibe',       category_name:'Vibe'},
+    {id:'lively',           label:'Lively',           description:'Energetic buzzing atmosphere', category_id:'vibe',       category_name:'Vibe'},
+    {id:'group-friendly',   label:'Group Friendly',   description:'Good for groups',              category_id:'vibe',       category_name:'Vibe'}
+  ];
+}
+
+// ══════════════════════════════
+//  BOOT
+// ══════════════════════════════
+document.addEventListener('DOMContentLoaded', function() {
+  S.cafes = JSON.parse(localStorage.getItem('blr_cafes') || '[]');
+  S.attrs = JSON.parse(localStorage.getItem('blr_attrs')  || 'null') || defaultAttrs();
+
+  // Populate location dropdowns
+  populateLoc('f-loc');
+
+  buildPills('pillBox', []);
+  renderCafeGrid();
+  updateBadge();
+
+  // NAV
+  document.querySelectorAll('.nav a[data-pg]').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      e.preventDefault();
+      showPage(a.getAttribute('data-pg'));
+    });
+  });
+
+  document.getElementById('btnGoAdd').addEventListener('click', function() {
+    resetForm();
+    showPage('pg-add');
+  });
+
+  // CAFE FORM
+  document.getElementById('cafeForm').addEventListener('submit', submitCafe);
+  document.getElementById('btnClearForm').addEventListener('click', resetForm);
+  document.getElementById('btnCancelEdit').addEventListener('click', function() {
+    resetForm();
+    showPage('pg-cafes');
+  });
+
+  // IMAGE PREVIEW — URL
+  document.getElementById('f-img').addEventListener('input', function() {
+    var p = document.getElementById('imgPreview');
+    if(this.value) { p.src = this.value; p.style.display = 'block'; document.getElementById('f-img')._base64 = null; }
+    else if(!document.getElementById('f-img-file').files.length) { p.style.display = 'none'; }
+  });
+
+  // FILE UPLOAD — open crop modal
+  document.getElementById('f-img-file').addEventListener('change', function() {
+    var file = this.files[0]; if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e) { openCropModal(e.target.result); };
+    reader.readAsDataURL(file);
+  });
+
+  // CROP MODAL wiring
+  document.getElementById('cropModalClose').addEventListener('click', closeCropModal);
+  document.getElementById('cropCancel').addEventListener('click', closeCropModal);
+  document.getElementById('cropApply').addEventListener('click', applyCrop);
+  document.querySelectorAll('.crop-ratio-btn').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.crop-ratio-btn').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on');
+      CROP.ratio = b.dataset.ratio === 'free' ? 0 : parseFloat(b.dataset.ratio);
+      if(CROP.ratio && CROP.sel.w > 0) enforceRatio();
+    });
+  });
+  initCropDrag();
+
+  // FILTERS
+  document.getElementById('attrFile').addEventListener('change', function() {
+    if(this.files[0]) {
+      document.getElementById('attrLbl').textContent = 'Selected: ' + this.files[0].name;
+      document.getElementById('attrZone').classList.add('sel');
+      setSt('attrSt','wn','File selected. Click Process CSV to apply.');
+    }
+  });
+  document.getElementById('btnAttrProc').addEventListener('click', procAttrCSV);
+  document.getElementById('btnAttrDl').addEventListener('click', dlAttrTpl);
+
+  // PUBLISH
+  document.getElementById('btnPub').addEventListener('click', publishJSON);
+  document.getElementById('btnPrev').addEventListener('click', previewJSON);
+  document.getElementById('btnClearAll').addEventListener('click', deleteAllCafes);
+
+  // MODAL
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.getElementById('editModal').addEventListener('click', function(e) {
+    if(e.target === this) closeModal();
+  });
+});
+
+// ══════════════════════════════
+//  PAGE SWITCHING
+// ══════════════════════════════
+function showPage(id) {
+  document.querySelectorAll('.pg').forEach(function(p){ p.classList.remove('on'); });
+  document.querySelectorAll('.nav a').forEach(function(a){ a.classList.remove('on'); });
+  document.getElementById(id).classList.add('on');
+  var link = document.querySelector('.nav a[data-pg="'+id+'"]');
+  if(link) link.classList.add('on');
+  if(PAGE_META[id]) {
+    document.getElementById('ttl').textContent = PAGE_META[id][0];
+    document.getElementById('sub').textContent = PAGE_META[id][1];
+  }
+  if(id==='pg-cafes')   renderCafeGrid();
+  if(id==='pg-filters') renderAttrList();
+  if(id==='pg-publish') renderPubStats();
+}
+
+// ══════════════════════════════
+//  LOCATION DROPDOWN
+// ══════════════════════════════
+function populateLoc(id) {
+  var sel = document.getElementById(id);
+  if(!sel) return;
+  while(sel.options.length > 1) sel.remove(1);
+  LOCS.forEach(function(l) {
+    var o = document.createElement('option'); o.value = o.textContent = l; sel.appendChild(o);
+  });
+}
+
+// ══════════════════════════════
+//  PILL BUILDER
+// ══════════════════════════════
+function buildPills(containerId, selected) {
+  var box = document.getElementById(containerId);
+  if(!box) return;
+  box.innerHTML = '';
+  byCat(S.attrs).forEach(function(cat) {
+    var sec = document.createElement('div'); sec.className = 'pill-group';
+    var t = document.createElement('div'); t.className = 'pill-cat'; t.textContent = cat.name; sec.appendChild(t);
+    var row = document.createElement('div'); row.className = 'pill-row';
+    cat.filters.forEach(function(a) {
+      var lbl = document.createElement('label');
+      lbl.className = 'pill' + (selected.indexOf(a.id) > -1 ? ' on' : '');
+      var cb = document.createElement('input'); cb.type = 'checkbox'; cb.value = a.id;
+      if(selected.indexOf(a.id) > -1) cb.checked = true;
+      cb.addEventListener('change', function(){ lbl.classList.toggle('on', cb.checked); });
+      lbl.appendChild(cb); lbl.appendChild(document.createTextNode(' '+a.label));
+      row.appendChild(lbl);
+    });
+    sec.appendChild(row); box.appendChild(sec);
+  });
+}
+
+function getCheckedPills(containerId) {
+  var tags = [];
+  document.querySelectorAll('#'+containerId+' input[type=checkbox]:checked').forEach(function(cb){ tags.push(cb.value); });
+  return tags;
+}
+
+// ══════════════════════════════
+//  CAFE FORM
+// ══════════════════════════════
+function submitCafe(e) {
+  e.preventDefault();
+  var cafe = {
+    id:          S.editId || Date.now(),
+    name:        gv('f-name'),
+    location:    gv('f-loc'),
+    address:     gv('f-addr'),
+    maps_url:    gv('f-maps'),
+    phone:       gv('f-phone'),
+    hours:       gv('f-hours'),
+    instagram:   gv('f-insta'),
+    image:       (document.getElementById('f-img-file').files[0] ? document.getElementById('f-img')._base64 || gv('f-img') : gv('f-img')),
+    description: gv('f-desc'),
+    tags:        getCheckedPills('pillBox')
+  };
+
+  if(S.editId) {
+    var i = idxById(S.cafes, S.editId);
+    if(i > -1) S.cafes[i] = cafe;
+    S.editId = null;
+    toast('Cafe updated!', 'ok');
+  } else {
+    S.cafes.push(cafe);
+    toast(cafe.name + ' added!', 'ok');
+  }
+
+  persist();
+  resetForm();
+  showPage('pg-cafes');
+}
+
+function resetForm() {
+  S.editId = null;
+  document.getElementById('cafeForm').reset();
+  document.getElementById('imgPreview').style.display = 'none';
+  document.getElementById('formTitle').textContent = 'Add New Cafe';
+  document.getElementById('btnCancelEdit').style.display = 'none';
+  var fi = document.getElementById('f-img-file');
+  fi.value = ''; fi._base64 = null;
+  document.getElementById('f-img')._base64 = null;
+  buildPills('pillBox', []);
+}
+
+function loadFormForEdit(cafe) {
+  S.editId = cafe.id;
+  document.getElementById('f-name').value  = cafe.name        || '';
+  document.getElementById('f-loc').value   = cafe.location    || '';
+  document.getElementById('f-addr').value  = cafe.address     || '';
+  document.getElementById('f-maps').value    = cafe.maps_url    || '';
+  document.getElementById('f-phone').value = cafe.phone       || '';
+  document.getElementById('f-hours').value = cafe.hours       || '';
+  document.getElementById('f-insta').value = cafe.instagram   || '';
+  document.getElementById('f-img').value   = cafe.image       || '';
+  document.getElementById('f-desc').value  = cafe.description || '';
+  if(cafe.image) {
+    var p = document.getElementById('imgPreview'); p.src = cafe.image; p.style.display = 'block';
+    // If it's base64, store it back so submitCafe picks it up on re-save
+    if(cafe.image.startsWith('data:')) {
+      document.getElementById('f-img')._base64 = cafe.image;
+    }
+  }
+  document.getElementById('formTitle').textContent = 'Edit: ' + cafe.name;
+  document.getElementById('btnCancelEdit').style.display = 'inline-flex';
+  buildPills('pillBox', cafe.tags || []);
+  showPage('pg-add');
+  window.scrollTo(0,0);
+}
+
+// ══════════════════════════════
+//  CAFE GRID (Live Cafes tab)
+// ══════════════════════════════
+function renderCafeGrid() {
+  var grid  = document.getElementById('cafeGrid');
+  var empty = document.getElementById('cafeEmpty');
+  grid.innerHTML = '';
+
+  if(!S.cafes.length) { empty.style.display='block'; return; }
+  empty.style.display = 'none';
+
+  S.cafes.forEach(function(cafe) {
+    var card = document.createElement('div'); card.className = 'cafe-card';
+
+    // Image
+    if(cafe.image) {
+      var img = document.createElement('img'); img.className = 'cafe-card-img'; img.src = cafe.image; img.alt = cafe.name;
+      img.onerror = function(){ this.style.display='none'; var ph=document.createElement('div'); ph.className='cafe-card-img-placeholder'; ph.textContent='&#9749;'; this.parentNode.insertBefore(ph,this); };
+      card.appendChild(img);
+    } else {
+      var ph = document.createElement('div'); ph.className = 'cafe-card-img-placeholder'; ph.innerHTML = '&#9749;'; card.appendChild(ph);
+    }
+
+    var body = document.createElement('div'); body.className = 'cafe-card-body';
+    body.innerHTML =
+      '<div class="cafe-card-name">'+esc(cafe.name)+'</div>' +
+      '<div class="cafe-card-loc">&#128205; '+esc(cafe.location)+'</div>';
+
+    // Tags
+    if(cafe.tags && cafe.tags.length) {
+      var tagsDiv = document.createElement('div'); tagsDiv.className = 'cafe-card-tags';
+      cafe.tags.slice(0,4).forEach(function(tid) {
+        var a = S.attrs.find(function(x){ return x.id===tid; });
+        var chip = document.createElement('span'); chip.className = 'tag-chip'; chip.textContent = a ? a.label : tid;
+        tagsDiv.appendChild(chip);
+      });
+      if(cafe.tags.length > 4) {
+        var more = document.createElement('span'); more.className = 'tag-chip'; more.textContent = '+' + (cafe.tags.length-4) + ' more'; tagsDiv.appendChild(more);
+      }
+      body.appendChild(tagsDiv);
+    }
+
+    card.appendChild(body);
+
+    // Actions
+    var acts = document.createElement('div'); acts.className = 'cafe-card-actions';
+    var eb = document.createElement('button'); eb.className = 'btn btn-ol btn-sm'; eb.innerHTML = '&#9998; Edit';
+    eb.addEventListener('click', function(){ loadFormForEdit(cafe); });
+    var db = document.createElement('button'); db.className = 'btn btn-rd btn-sm'; db.innerHTML = '&#128465; Delete';
+    db.addEventListener('click', function(){ deleteCafe(cafe.id); });
+    acts.appendChild(eb); acts.appendChild(db);
+    card.appendChild(acts);
+
+    grid.appendChild(card);
+  });
+}
+
+function deleteCafe(id) {
+  var cafe = S.cafes[idxById(S.cafes, id)];
+  if(!cafe) return;
+  if(!confirm('Delete "' + cafe.name + '"?')) return;
+  S.cafes = S.cafes.filter(function(c){ return c.id !== id; });
+  persist(); renderCafeGrid(); toast('Deleted.', 'er');
+}
+
+function deleteAllCafes() {
+  if(!confirm('Delete ALL cafes? This cannot be undone.')) return;
+  S.cafes = []; persist(); renderCafeGrid(); toast('All cafes deleted.');
+}
+
+// ══════════════════════════════
+//  ATTR LIST
+// ══════════════════════════════
+function renderAttrList() {
+  var box = document.getElementById('attrList'); box.innerHTML = '';
+  byCat(S.attrs).forEach(function(cat) {
+    var g = document.createElement('div'); g.className = 'cg';
+    var t = document.createElement('div'); t.className = 'ctitle'; t.textContent = cat.name; g.appendChild(t);
+    cat.filters.forEach(function(a) {
+      var r = document.createElement('div'); r.className = 'ar';
+      r.innerHTML = '<div><div class="ar-n">'+esc(a.label)+'</div><div class="ar-m">id: '+esc(a.id)+' &nbsp;&middot;&nbsp; '+esc(a.description)+'</div></div>';
+      g.appendChild(r);
+    });
+    box.appendChild(g);
+  });
+}
+
+// ══════════════════════════════
+//  ATTR CSV
+// ══════════════════════════════
+function procAttrCSV() {
+  var fi = document.getElementById('attrFile');
+  if(!fi.files || !fi.files[0]) { setSt('attrSt','er','No file selected. Click the upload area first.'); return; }
+  readTxt(fi.files[0], function(txt) {
+    var rows = parseCSV(txt);
+    if(!rows.length) { setSt('attrSt','er','CSV appears empty.'); return; }
+    var parsed = [];
+    rows.forEach(function(r) {
+      var item = {
+        id:            (r.id            || '').trim(),
+        label:         (r.label         || '').trim(),
+        description:   (r.description   || '').trim(),
+        category_id:   (r.category_id   || 'general').trim(),
+        category_name: (r.category_name || 'General').trim()
+      };
+      if(item.id && item.label) parsed.push(item);
+    });
+    if(!parsed.length) { setSt('attrSt','er','No valid rows. Headers: category_name, category_id, id, label, description'); return; }
+    S.attrs = parsed;
+    localStorage.setItem('blr_attrs', JSON.stringify(S.attrs));
+    buildPills('pillBox', []);
+    renderAttrList();
+    setSt('attrSt','ok', parsed.length + ' filter tags loaded successfully!');
+    toast(parsed.length + ' filters updated!', 'ok');
+  }, function(){ setSt('attrSt','er','Could not read file.'); });
+}
+
+function dlAttrTpl() {
+  var r = ['category_name,category_id,id,label,description'];
+  S.attrs.forEach(function(a){
+    r.push('"'+a.category_name+'","'+a.category_id+'","'+a.id+'","'+a.label+'","'+a.description+'"');
+  });
+  dlBlob('attributes_template.csv', r.join('\n'), 'text/csv');
+  toast('Template downloaded!');
+}
+
+// ══════════════════════════════
+//  PUBLISH
+// ══════════════════════════════
+function renderPubStats() {
+  var locs = {};
+  S.cafes.forEach(function(c){ if(c.location) locs[c.location]=1; });
+  document.getElementById('pstats').innerHTML =
+    pst(S.cafes.length,'Cafes') + pst(Object.keys(locs).length,'Locations') + pst(S.attrs.length,'Filter Tags');
+}
+
+function pst(n, l) { return '<div class="pstat"><div class="n">'+n+'</div><div class="l">'+l+'</div></div>'; }
+
+function buildDB() {
+  return {
+    locations:         LOCS,
+    attributes:        S.attrs.map(function(a){ return {id:a.id, label:a.label, description:a.description}; }),
+    filter_categories: byCat(S.attrs),
+    cafes:             S.cafes
+  };
+}
+
+function previewJSON() {
+  document.getElementById('previewTxt').textContent = JSON.stringify(buildDB(), null, 2);
+  document.getElementById('previewBox').style.display = 'block';
+  toast('Preview ready.');
+}
+
+function publishJSON() {
+  dlBlob('cafes_database.json', JSON.stringify(buildDB(), null, 2), 'application/json');
+  toast('cafes_database.json downloaded!', 'ok');
+}
+
+// ══════════════════════════════
+//  MODAL (unused — kept for future)
+// ══════════════════════════════
+function closeModal() { document.getElementById('editModal').classList.remove('on'); }
+
+// ══════════════════════════════
+//  HELPERS
+// ══════════════════════════════
+function byCat(attrs) {
+  var m = {}, o = [];
+  attrs.forEach(function(a) {
+    if(!m[a.category_id]) { m[a.category_id] = {id:a.category_id, name:a.category_name, filters:[]}; o.push(a.category_id); }
+    m[a.category_id].filters.push({id:a.id, label:a.label, description:a.description});
+  });
+  return o.map(function(k){ return m[k]; });
+}
+
+function parseCSV(raw) {
+  var lines = raw.trim().split(/\r?\n/);
+  if(lines.length < 2) return [];
+  var hdrs = splitL(lines[0]), out = [];
+  for(var i=1; i<lines.length; i++) {
+    if(!lines[i].trim()) continue;
+    var vals = splitL(lines[i]), obj = {};
+    hdrs.forEach(function(h,j){ obj[h.trim()] = (vals[j]||'').trim(); });
+    out.push(obj);
+  }
+  return out;
+}
+
+function splitL(line) {
+  var res=[],cur='',q=false;
+  for(var i=0;i<line.length;i++){
+    var c=line[i];
+    if(c==='"'){if(q&&line[i+1]==='"'){cur+='"';i++;}else{q=!q;}}
+    else if(c===','&&!q){res.push(cur);cur='';}
+    else{cur+=c;}
+  }
+  res.push(cur); return res;
+}
+
+function readTxt(file, ok, fail) { var r=new FileReader(); r.onload=function(e){ok(e.target.result);}; r.onerror=fail; r.readAsText(file); }
+function dlBlob(name,content,type){ var b=new Blob([content],{type:type||'text/plain'}),u=URL.createObjectURL(b),a=document.createElement('a'); a.href=u; a.download=name; a.click(); URL.revokeObjectURL(u); }
+function setSt(id,type,msg){ var cls={ok:'sb-ok',wn:'sb-wn',er:'sb-er'}[type]||''; document.getElementById(id).innerHTML='<div class="sb '+cls+'">'+msg+'</div>'; }
+function idxById(arr,id){ for(var i=0;i<arr.length;i++){if(arr[i].id===id)return i;} return -1; }
+function gv(id){ return document.getElementById(id).value.trim(); }
+function persist(){ localStorage.setItem('blr_cafes',JSON.stringify(S.cafes)); localStorage.setItem('blr_attrs',JSON.stringify(S.attrs)); updateBadge(); }
+function updateBadge(){ var b=document.getElementById('draftBadge'); if(S.cafes.length){b.textContent=S.cafes.length;b.style.display='inline-block';}else{b.style.display='none';} }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+var _tt;
+function toast(msg,type){ var el=document.getElementById('toast'); el.textContent=msg; el.className='on '+(type||''); clearTimeout(_tt); _tt=setTimeout(function(){el.className='';},3000); }
+
+// ══════════════════════════════
+//  CROP ENGINE
+// ══════════════════════════════
+var CROP = { img: null, scaleX: 1, scaleY: 1, ratio: 0, sel: {x:0,y:0,w:0,h:0} };
+
+function openCropModal(src) {
+  var img = new Image();
+  img.onload = function() {
+    CROP.img = img;
+    var canvas = document.getElementById('cropCanvas');
+    var wrap   = document.getElementById('cropWrap');
+    var maxW   = wrap.clientWidth || 640;
+    var scale  = Math.min(1, maxW / img.width);
+    canvas.width  = Math.round(img.width  * scale);
+    canvas.height = Math.round(img.height * scale);
+    CROP.scaleX = img.width  / canvas.width;
+    CROP.scaleY = img.height / canvas.height;
+    var ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    CROP.sel = {x:10, y:10, w:canvas.width-20, h:canvas.height-20};
+    if(CROP.ratio) enforceRatio();
+    drawSelection();
+    document.getElementById('cropModal').classList.add('on');
+  };
+  img.src = src;
+}
+
+function closeCropModal() {
+  document.getElementById('cropModal').classList.remove('on');
+  document.getElementById('f-img-file').value = '';
+}
+
+function enforceRatio() {
+  var canvas = document.getElementById('cropCanvas');
+  var s = CROP.sel;
+  var newH = Math.round(s.w / CROP.ratio);
+  if(s.y + newH > canvas.height) { newH = canvas.height - s.y; s.w = Math.round(newH * CROP.ratio); }
+  s.h = newH;
+  drawSelection();
+}
+
+function drawSelection() {
+  var s = CROP.sel;
+  var sel = document.getElementById('cropSel');
+  sel.style.display = 'block';
+  sel.style.left    = s.x + 'px';
+  sel.style.top     = s.y + 'px';
+  sel.style.width   = s.w + 'px';
+  sel.style.height  = s.h + 'px';
+}
+
+function applyCrop() {
+  var s = CROP.sel;
+  var out = document.createElement('canvas');
+  out.width  = Math.round(s.w * CROP.scaleX);
+  out.height = Math.round(s.h * CROP.scaleY);
+  var ctx = out.getContext('2d');
+  ctx.drawImage(CROP.img,
+    Math.round(s.x * CROP.scaleX), Math.round(s.y * CROP.scaleY),
+    out.width, out.height, 0, 0, out.width, out.height);
+  var b64 = out.toDataURL('image/jpeg', 0.88);
+  document.getElementById('f-img')._base64 = b64;
+  document.getElementById('f-img').value   = '';
+  var p = document.getElementById('imgPreview'); p.src = b64; p.style.display = 'block';
+  document.getElementById('cropModal').classList.remove('on');
+  toast('Image cropped!', 'ok');
+}
+
+function initCropDrag() {
+  var wrap   = document.getElementById('cropWrap');
+  var canvas = document.getElementById('cropCanvas');
+  var state  = { mode: null, startX:0, startY:0, origSel: null };
+
+  function getPos(e) {
+    var r  = canvas.getBoundingClientRect();
+    var cx = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+    var cy = (e.touches ? e.touches[0].clientY : e.clientY) - r.top;
+    return { x: Math.max(0, Math.min(cx, canvas.width)), y: Math.max(0, Math.min(cy, canvas.height)) };
+  }
+
+  function onDown(e) {
+    if(!CROP.img) return;
+    e.preventDefault();
+    var pos = getPos(e);
+    var h   = e.target.dataset ? e.target.dataset.h : null;
+    if(h) { state.mode = 'resize-' + h; state.origSel = Object.assign({}, CROP.sel); }
+    else  { state.mode = 'draw'; CROP.sel = {x:pos.x, y:pos.y, w:0, h:0}; }
+    state.startX = pos.x; state.startY = pos.y;
+  }
+
+  function onMove(e) {
+    if(!state.mode) return;
+    e.preventDefault();
+    var pos = getPos(e);
+    var dx  = pos.x - state.startX, dy = pos.y - state.startY;
+    var s = CROP.sel, o = state.origSel;
+    if(state.mode === 'draw') {
+      s.x = Math.min(state.startX, pos.x); s.y = Math.min(state.startY, pos.y);
+      s.w = Math.abs(dx); s.h = CROP.ratio ? Math.round(s.w / CROP.ratio) : Math.abs(dy);
+    } else if(state.mode === 'resize-br') {
+      s.w = Math.max(20, o.w + dx); s.h = CROP.ratio ? Math.round(s.w/CROP.ratio) : Math.max(20, o.h+dy);
+    } else if(state.mode === 'resize-tl') {
+      var nw=Math.max(20,o.w-dx), nh=CROP.ratio?Math.round(nw/CROP.ratio):Math.max(20,o.h-dy);
+      s.x=o.x+o.w-nw; s.y=o.y+o.h-nh; s.w=nw; s.h=nh;
+    } else if(state.mode === 'resize-tr') {
+      s.w=Math.max(20,o.w+dx); s.h=CROP.ratio?Math.round(s.w/CROP.ratio):Math.max(20,o.h-dy); s.y=o.y+o.h-s.h;
+    } else if(state.mode === 'resize-bl') {
+      var nw2=Math.max(20,o.w-dx); s.h=CROP.ratio?Math.round(nw2/CROP.ratio):Math.max(20,o.h+dy); s.x=o.x+o.w-nw2; s.w=nw2;
+    }
+    s.x=Math.max(0,Math.min(s.x,canvas.width-s.w)); s.y=Math.max(0,Math.min(s.y,canvas.height-s.h));
+    drawSelection();
+  }
+
+  function onUp() { state.mode = null; }
+
+  wrap.addEventListener('mousedown',   onDown);
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup',   onUp);
+  wrap.addEventListener('touchstart',  onDown, {passive:false});
+  window.addEventListener('touchmove', onMove, {passive:false});
+  window.addEventListener('touchend',  onUp);
+}
+
+</script>
+
+<!-- CROP MODAL -->
+<div id="cropModal">
+  <div class="crop-box">
+    <div class="crop-title">
+      <span>&#9999; Crop Image</span>
+      <button id="cropModalClose">&#10005;</button>
+    </div>
+    <div class="crop-ratio-row">
+      <button class="crop-ratio-btn on" data-ratio="free">Free</button>
+      <button class="crop-ratio-btn" data-ratio="1.333">4:3</button>
+      <button class="crop-ratio-btn" data-ratio="1.778">16:9</button>
+      <button class="crop-ratio-btn" data-ratio="1">1:1</button>
+    </div>
+    <div class="crop-canvas-wrap" id="cropWrap">
+      <canvas id="cropCanvas"></canvas>
+      <div class="crop-selection" id="cropSel" style="display:none">
+        <div class="crop-handle tl" data-h="tl"></div>
+        <div class="crop-handle tr" data-h="tr"></div>
+        <div class="crop-handle bl" data-h="bl"></div>
+        <div class="crop-handle br" data-h="br"></div>
+      </div>
+    </div>
+    <div class="crop-hint">Click and drag to select crop area &nbsp;&middot;&nbsp; Drag handles to resize</div>
+    <div class="crop-actions">
+      <button class="crop-btn crop-btn-cancel" id="cropCancel">Cancel</button>
+      <button class="crop-btn crop-btn-apply" id="cropApply">&#10003; Crop &amp; Use</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
