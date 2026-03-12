@@ -1,0 +1,267 @@
+{
+  "locations": [
+    "HSR Layout",
+    "Indiranagar",
+    "Koramangala",
+    "Whitefield",
+    "Jayanagar",
+    "Bellandur",
+    "Sarjapur Road",
+    "JP Nagar",
+    "Marathahalli"
+  ],
+  "attributes": [
+    {
+      "id": "ambience",
+      "label": "Great Ambience",
+      "description": "Well-designed interiors"
+    },
+    {
+      "id": "quiet",
+      "label": "Quiet",
+      "description": "Quiet and calm environment"
+    },
+    {
+      "id": "scenic",
+      "label": "Scenic View",
+      "description": "Scenic or nature view"
+    },
+    {
+      "id": "outdoor",
+      "label": "Outdoor Seating",
+      "description": "Outdoor seating available"
+    },
+    {
+      "id": "cozy",
+      "label": "Cozy",
+      "description": "Warm and cozy feel"
+    },
+    {
+      "id": "wifi",
+      "label": "WiFi",
+      "description": "Free WiFi available"
+    },
+    {
+      "id": "parking",
+      "label": "Parking",
+      "description": "Parking available"
+    },
+    {
+      "id": "pets",
+      "label": "Pet Friendly",
+      "description": "Pets allowed"
+    },
+    {
+      "id": "power-outlets",
+      "label": "Power Outlets",
+      "description": "Charging points available"
+    },
+    {
+      "id": "ac",
+      "label": "Air Conditioned",
+      "description": "Air conditioned space"
+    },
+    {
+      "id": "specialty-coffee",
+      "label": "Specialty Coffee",
+      "description": "Third-wave specialty coffee"
+    },
+    {
+      "id": "vegan",
+      "label": "Vegan Options",
+      "description": "Vegan menu items"
+    },
+    {
+      "id": "food",
+      "label": "Good Food",
+      "description": "Quality food menu"
+    },
+    {
+      "id": "brunch",
+      "label": "Brunch",
+      "description": "Brunch menu available"
+    },
+    {
+      "id": "desserts",
+      "label": "Desserts",
+      "description": "Great desserts and pastries"
+    },
+    {
+      "id": "work-friendly",
+      "label": "Work Friendly",
+      "description": "Good for working or studying"
+    },
+    {
+      "id": "romantic",
+      "label": "Romantic",
+      "description": "Great for dates"
+    },
+    {
+      "id": "instagrammable",
+      "label": "Instagrammable",
+      "description": "Photogenic and aesthetic"
+    },
+    {
+      "id": "lively",
+      "label": "Lively",
+      "description": "Energetic buzzing atmosphere"
+    },
+    {
+      "id": "group-friendly",
+      "label": "Group Friendly",
+      "description": "Good for groups"
+    }
+  ],
+  "filter_categories": [
+    {
+      "id": "ambience",
+      "name": "Ambience",
+      "filters": [
+        {
+          "id": "ambience",
+          "label": "Great Ambience",
+          "description": "Well-designed interiors"
+        },
+        {
+          "id": "quiet",
+          "label": "Quiet",
+          "description": "Quiet and calm environment"
+        },
+        {
+          "id": "scenic",
+          "label": "Scenic View",
+          "description": "Scenic or nature view"
+        },
+        {
+          "id": "outdoor",
+          "label": "Outdoor Seating",
+          "description": "Outdoor seating available"
+        },
+        {
+          "id": "cozy",
+          "label": "Cozy",
+          "description": "Warm and cozy feel"
+        }
+      ]
+    },
+    {
+      "id": "amenities",
+      "name": "Amenities",
+      "filters": [
+        {
+          "id": "wifi",
+          "label": "WiFi",
+          "description": "Free WiFi available"
+        },
+        {
+          "id": "parking",
+          "label": "Parking",
+          "description": "Parking available"
+        },
+        {
+          "id": "pets",
+          "label": "Pet Friendly",
+          "description": "Pets allowed"
+        },
+        {
+          "id": "power-outlets",
+          "label": "Power Outlets",
+          "description": "Charging points available"
+        },
+        {
+          "id": "ac",
+          "label": "Air Conditioned",
+          "description": "Air conditioned space"
+        }
+      ]
+    },
+    {
+      "id": "food-drink",
+      "name": "Food & Drink",
+      "filters": [
+        {
+          "id": "specialty-coffee",
+          "label": "Specialty Coffee",
+          "description": "Third-wave specialty coffee"
+        },
+        {
+          "id": "vegan",
+          "label": "Vegan Options",
+          "description": "Vegan menu items"
+        },
+        {
+          "id": "food",
+          "label": "Good Food",
+          "description": "Quality food menu"
+        },
+        {
+          "id": "brunch",
+          "label": "Brunch",
+          "description": "Brunch menu available"
+        },
+        {
+          "id": "desserts",
+          "label": "Desserts",
+          "description": "Great desserts and pastries"
+        }
+      ]
+    },
+    {
+      "id": "vibe",
+      "name": "Vibe",
+      "filters": [
+        {
+          "id": "work-friendly",
+          "label": "Work Friendly",
+          "description": "Good for working or studying"
+        },
+        {
+          "id": "romantic",
+          "label": "Romantic",
+          "description": "Great for dates"
+        },
+        {
+          "id": "instagrammable",
+          "label": "Instagrammable",
+          "description": "Photogenic and aesthetic"
+        },
+        {
+          "id": "lively",
+          "label": "Lively",
+          "description": "Energetic buzzing atmosphere"
+        },
+        {
+          "id": "group-friendly",
+          "label": "Group Friendly",
+          "description": "Good for groups"
+        }
+      ]
+    }
+  ],
+  "cafes": [
+    {
+      "id": 1773304187592,
+      "name": "The Coffee Brewery",
+      "location": "Bellandur",
+      "address": "Green Glen Layout",
+      "phone": "9013388189",
+      "hours": "7AM - 1AM",
+      "price_range": "₹",
+      "instagram": "",
+      "image": "",
+      "description": "",
+      "tags": [
+        "ambience",
+        "quiet",
+        "outdoor",
+        "wifi",
+        "power-outlets",
+        "ac",
+        "specialty-coffee",
+        "work-friendly",
+        "lively",
+        "group-friendly"
+      ]
+    }
+  ]
+}
